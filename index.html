@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Financial Dashboard • Home</title>
+  <link rel="stylesheet" href="styles/base.css" />
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="navbar__brand">
+      Nonprofit Financial Dashboard
+      <span class="badge">Home</span>
+    </div>
+
+    <nav class="navbar__links">
+      <a class="active" href="index.html">Home</a>
+      <a href="graphs.html">Graphs</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <!-- Page intro -->
+    <div class="page-title">
+      <div>
+        <h1>Financial overview</h1>
+        <p>
+          Executive snapshot of liquidity, leverage, and mission-aligned spending using your Unified Chart of Accounts.
+          Use <strong>Graphs</strong> for deeper filters and trend comparisons across orgs and years.
+        </p>
+      </div>
+
+      <div class="actions">
+        <a class="btn secondary" href="graphs.html">Open Graph Dashboard</a>
+        <button class="btn" type="button" id="importBtn">Import consolidated file</button>
+      </div>
+    </div>
+
+    <!-- KPI row -->
+    <section class="kpi-grid">
+      <div class="card kpi">
+        <div class="label">Avg Quick Ratio</div>
+        <div class="value" id="kpiQuick">—</div>
+        <div class="sub">
+          <span class="pill good">Target ≥ 2.0</span>
+          <span>All orgs • Latest year</span>
+        </div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">Avg Current Ratio</div>
+        <div class="value" id="kpiCurrent">—</div>
+        <div class="sub">
+          <span class="pill warn">Watch 1.0–2.0</span>
+          <span>All orgs • Latest year</span>
+        </div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">Debt Ratio</div>
+        <div class="value" id="kpiDebt">—</div>
+        <div class="sub">
+          <span class="pill bad">High leverage</span>
+          <span>Total liabilities / net assets</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- UCOA + Preview -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Unified Chart of Accounts</h2>
+        <div class="muted">Consolidated view • Plug in your table when ready</div>
+      </div>
+
+      <div class="grid-2">
+        <!-- UCOA table card -->
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Strategic dimension</th>
+                  <th>Example rollup</th>
+                  <th class="num">Amount</th>
+                  <th class="num">% of total</th>
+                </tr>
+              </thead>
+              <tbody id="ucoaBody">
+                <!-- Placeholder rows (replace with real data later) -->
+                <tr>
+                  <td><span class="dim"><span class="dot b1"></span>FN-01 Backbone & Gen Ops</span></td>
+                  <td>Admin, indirect, management fees</td>
+                  <td class="num">$—</td>
+                  <td class="num">—%</td>
+                </tr>
+                <tr>
+                  <td><span class="dim"><span class="dot b2"></span>FN-02 Live & Thrive</span></td>
+                  <td>Buildings, capital improvements</td>
+                  <td class="num">$—</td>
+                  <td class="num">—%</td>
+                </tr>
+                <tr>
+                  <td><span class="dim"><span class="dot b3"></span>FN-04 Power Building</span></td>
+                  <td>Civic engagement, organizing</td>
+                  <td class="num">$—</td>
+                  <td class="num">—%</td>
+                </tr>
+                <tr>
+                  <td><span class="dim"><span class="dot b4"></span>FN-05 Learn & Grow</span></td>
+                  <td>Youth programs, scholarships</td>
+                  <td class="num">$—</td>
+                  <td class="num">—%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Trend preview card -->
+        <div class="card">
+          <div class="section-header" style="margin-bottom:10px;">
+            <h2>Trend preview</h2>
+            <div class="muted">Quick Ratio • Recent years</div>
+          </div>
+
+          <div class="spark">
+            Preview placeholder.<br/>
+            This area can show a small trend chart or highlights once your consolidated ratios load.
+          </div>
+
+          <div class="cta-row">
+            <a class="btn" href="graphs.html">Explore graphs →</a>
+            <button class="btn secondary" type="button" id="exportBtn">Export summary</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div>Built for consolidated audited financials and ratios (long-format table).</div>
+    </div>
+  </div>
+
+  <!-- Tiny placeholders so buttons don't feel dead -->
+  <script>
+    document.getElementById("importBtn").addEventListener("click", () => {
+      alert("Later: hook this to upload / fetch of your consolidated ratios table (CSV/JSON).");
+    });
+
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      alert("Later: hook this to export a summary CSV/PDF once your data loads.");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Financial Dashboard • Graphs</title>
+  <link rel="stylesheet" href="styles/graphs.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="navbar__brand">Nonprofit Financial Dashboard</div>
+    <div class="navbar__links">
+      <a href="index.html">Home</a>
+      <a href="graphs.html">Graphs</a>
+    </div>
+  </div>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Filters</h2>
+
+      <div class="filter">
+        <label for="orgSelect">Organization</label>
+        <select id="orgSelect"></select>
+      </div>
+
+      <div class="filter">
+        <label for="chartTypeSelect">Chart Type</label>
+        <select id="chartTypeSelect">
+          <option value="bar">Grouped Bar (Compare Orgs)</option>
+          <option value="line">Multi-Line (Trends Over Time)</option>
+        </select>
+      </div>      
+
+      <div class="filter">
+        <label for="ratioSelect">Ratio</label>
+        <select id="ratioSelect">
+          <option value="Quick Ratio">Quick Ratio</option>
+          <option value="Current Ratio">Current Ratio</option>
+          <option value="Debt Ratio">Debt Ratio</option>
+        </select>
+      </div>
+
+      <div class="filter">
+        <label>Year Range</label>
+        <div class="range">
+          <input id="yearMin" type="number" placeholder="From" />
+          <input id="yearMax" type="number" placeholder="To" />
+        </div>
+      </div>
+
+      <button id="applyBtn" class="btn">Apply</button>
+    </aside>  
+
+    <!-- Main -->
+    <main class="main">
+
+        <header class="main__header">
+            <div>
+              <h2 id="chartTitle">Quick Ratio</h2>
+              <p id="chartSubtitle" class="muted">Organization: All</p>
+            </div>
+        </header>    
+        <div class="card">
+          <canvas id="ratioChart"></canvas>
+        </div>
+    </main>
+  </div>
+
+  <script src="scripts/graphs.js"></script>
+</body>
+</html>
