@@ -40,32 +40,34 @@
 
     <!-- KPI row -->
     <section class="kpi-grid">
+
       <div class="card kpi">
-        <div class="label">Avg Quick Ratio</div>
-        <div class="value" id="kpiQuick">—</div>
+        <div class="label">Total Revenue</div>
+        <div class="value" id="kpiRevenue">—</div>
         <div class="sub">
-          <span class="pill good">Target ≥ 2.0</span>
-          <span>All orgs • Latest year</span>
+          <span class="pill good">Budget</span>
+          <span>Latest column</span>
+        </div>
+      </div>
+    
+      <div class="card kpi">
+        <div class="label">Total Expenses</div>
+        <div class="value" id="kpiExpenses">—</div>
+        <div class="sub">
+          <span class="pill warn">Budget</span>
+          <span>Latest column</span>
+        </div>
+      </div>
+    
+      <div class="card kpi">
+        <div class="label">Surplus / (Deficit)</div>
+        <div class="value" id="kpiSurplus">—</div>
+        <div class="sub">
+          <span class="pill bad">Revenue − Expenses</span>
+          <span>Latest column</span>
         </div>
       </div>
 
-      <div class="card kpi">
-        <div class="label">Avg Current Ratio</div>
-        <div class="value" id="kpiCurrent">—</div>
-        <div class="sub">
-          <span class="pill warn">Watch 1.0–2.0</span>
-          <span>All orgs • Latest year</span>
-        </div>
-      </div>
-
-      <div class="card kpi">
-        <div class="label">Debt Ratio</div>
-        <div class="value" id="kpiDebt">—</div>
-        <div class="sub">
-          <span class="pill bad">High leverage</span>
-          <span>Total liabilities / net assets</span>
-        </div>
-      </div>
     </section>
 
     <!-- UCOA + Preview -->
@@ -144,15 +146,7 @@
     </div>
   </div>
 
-  <!-- Tiny placeholders so buttons don't feel dead -->
-  <script>
-    document.getElementById("importBtn").addEventListener("click", () => {
-      alert("Later: hook this to upload / fetch of your consolidated ratios table (CSV/JSON).");
-    });
+  <script src="scripts/ucoa.js"></script>
 
-    document.getElementById("exportBtn").addEventListener("click", () => {
-      alert("Later: hook this to export a summary CSV/PDF once your data loads.");
-    });
-  </script>
 </body>
 </html>
