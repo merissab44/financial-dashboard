@@ -147,7 +147,7 @@ function renderLine(canvas, labels, datasets, title) {
       interaction: { mode: "nearest", intersect: false },
       plugins: { title: { display: true, text: title } },
       scales: { y: { 
-        max: 15,
+        max: 20,
         ticks: { callback: (v) => Number(v).toFixed(2) } 
       } 
     }
