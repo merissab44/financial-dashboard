@@ -247,6 +247,11 @@ tbody tr:hover td{
 .dot.b2{background:rgba(34,197,94,.30); border-color:rgba(34,197,94,.55);}
 .dot.b3{background:rgba(245,158,11,.30); border-color:rgba(245,158,11,.55);}
 .dot.b4{background:rgba(168,85,247,.30); border-color:rgba(168,85,247,.55);}
+.dot.b5 { background: #06b6d4; }  
+.dot.b6 { background: #ef4444; } 
+.dot.b7 { background: #f97316; }  
+.dot.b8 { background: #22c55e; }  
+
 
 /* PREVIEW */
 .spark{
