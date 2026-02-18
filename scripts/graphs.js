@@ -33,13 +33,14 @@ function liquidityDiv(a, b) {
   if (B < MIN_LIABILITY_FOR_LIQUIDITY_RATIOS) return null;
   return A / B;
 }
-
+// Calculations for ratios. 
 const METRICS = {
   "Quick Ratio": (r) => liquidityDiv(r.quick_assets, r.current_liabilities),
   "Current Ratio": (r) => liquidityDiv(r.current_assets, r.current_liabilities),
   "Debt Ratio": (r) => safeDiv(r.total_liabilities, r.total_unrestricted_net_assets),
 };
 
+//Logic that determines color based on ratio thresholds (red/yellow/green)
 function statusColor(metricName, v) {
   if (v == null || !Number.isFinite(v)) return "#6b7280"; // gray for missing
 
@@ -136,6 +137,9 @@ function destroyChart() {
   __chart = null;
 }
 
+/*creates a line chart with the given labels, datasets, and title. 
+It first destroys any existing chart to prevent memory leaks or overlapping charts. */
+
 function renderLine(canvas, labels, datasets, title) {
   destroyChart();
   __chart = new Chart(canvas.getContext("2d"), {
@@ -154,6 +158,11 @@ function renderLine(canvas, labels, datasets, title) {
     }
   });
 }
+
+/* creates bar chart for comparing orgs for a single year. 
+It uses the same destroyChart function to clear any existing chart before rendering the new one. 
+The bars are colored based on the statusColor function, 
+which assigns colors according to predefined thresholds for each metric.*/ 
 
 function renderGroupedBar(canvas, labels, datasets, title) {
   destroyChart();
@@ -194,7 +203,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Flexible hookups (works with your current layout)
+  // links to graphs page with #chart=...
   const orgSelect = pickEl(["#orgSelect", "#organizationSelect", "select[name='organization']"]);
   const chartTypeSelect = pickEl(["#chartTypeSelect", "#chartType", "select[name='chartType']"]);
   const ratioSelect = pickEl(["#ratioSelect", "#metricSelect", "select[name='ratio']"]);
@@ -202,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const endYearEl   = document.getElementById("yearMax");  
   const applyBtn = pickEl(["#applyBtn", "button#apply", "button"]);
 
-  // Canvas: try common ids, else first canvas on page
+  // grabs the canvas element where the chart will be rendered.
   const canvas = document.getElementById("ratioChart");
   if (!canvas) {
     console.error("No canvas found on page.");

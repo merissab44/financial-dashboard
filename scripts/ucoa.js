@@ -1,10 +1,8 @@
-// ucoa.js — Home dashboard (Budget cover + UCOA table) from CSV
 // ------------------------------------------------------------
-// Change this path to your actual budget CSV file:
+// Path to CSV file:
 const CSV_PATH = "data/Rise_East_Budget_Cleaned.csv"; // <-- update if needed
 
 // Strategic dimensions shown in the homepage table
-// Add / edit csvLabels so they match the FIRST column labels in your CSV.
 const DIMENSIONS = [
   { id: "1.", label: "Backbone & Gen Ops", dotClass: "dot-fn01", statement: "Admin, indirect, management fees", csvLabels: ["1. Backbone and Gen Ops", "Backbone and Gen Ops", "Backbone & Gen Ops"] },
   { id: "2.", label: "Live & Thrive", dotClass: "dot-fn02", statement: "Buildings, capital improvements", csvLabels: ["2. Live and Thrive", "Live and Thrive", "Live & Thrive"] },
@@ -67,6 +65,7 @@ function formatPct(v) {
   return `${(v * 100).toFixed(1)}%`;
 }
 
+//looks through CSV file
 function parseCSV(text) {
   const rows = [];
   let i = 0, field = "", row = [], inQuotes = false;
@@ -94,6 +93,7 @@ function parseCSV(text) {
   if (row.some(x => String(x || "").trim() !== "")) rows.push(row.map(x => String(x || "").trim()));
   return rows;
 }
+
 
 function buildLineMap(rows) {
   const map = new Map();
