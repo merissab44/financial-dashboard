@@ -38,9 +38,9 @@ const DIMENSIONS = [
 // ====== DOM ======
 const dom = {
   yearSelect: document.getElementById("yearSelect"),
-  kpiRevenue: document.getElementById("kpiQuick"),
-  kpiExpenses: document.getElementById("kpiCurrent"),
-  kpiSurplus: document.getElementById("kpiDebt"),
+  kpiRevenue: document.getElementById("kpiRevenue"),
+  kpiExpenses: document.getElementById("kpiExpenses"),
+  kpiSurplus: document.getElementById("kpiSurplus"),
   ucoaBody: document.getElementById("ucoaBody"),
 };
 
