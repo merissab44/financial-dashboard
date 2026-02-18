@@ -11,8 +11,7 @@
   <!-- NAVBAR -->
   <div class="navbar">
     <div class="navbar__brand">
-      Nonprofit Financial Dashboard
-      <span class="badge">Home</span>
+      Rise East Dashboard
     </div>
 
     <nav class="navbar__links">
@@ -34,7 +33,6 @@
 
       <div class="actions">
         <a class="btn secondary" href="graphs.html">Open Graph Dashboard</a>
-        <button class="btn" type="button" id="importBtn">Import consolidated file</button>
       </div>
     </div>
 
@@ -57,8 +55,6 @@
         <div class="label">Total Revenue</div>
         <div class="value" id="kpiRevenue">—</div>
         <div class="sub">
-          <span class="pill good">Budget</span>
-          <span>Latest column</span>
         </div>
       </div>
     
@@ -66,8 +62,6 @@
         <div class="label">Total Expenses</div>
         <div class="value" id="kpiExpenses">—</div>
         <div class="sub">
-          <span class="pill warn">Budget</span>
-          <span>Latest column</span>
         </div>
       </div>
     
@@ -75,8 +69,6 @@
         <div class="label">Surplus / (Deficit)</div>
         <div class="value" id="kpiSurplus">—</div>
         <div class="sub">
-          <span class="pill bad">Revenue − Expenses</span>
-          <span>Latest column</span>
         </div>
       </div>
 
@@ -86,7 +78,6 @@
     <section class="section">
       <div class="section-header">
         <h2>Unified Chart of Accounts</h2>
-        <div class="muted">Consolidated view • Plug in your table when ready</div>
       </div>
 
       <div class="grid-2">
@@ -132,26 +123,9 @@
             </table>
           </div>
         </div>
-
-        <!-- Trend preview card -->
-        <div class="card">
-          <div class="section-header" style="margin-bottom:10px;">
-            <h2>Trend preview</h2>
-            <div class="muted">Quick Ratio • Recent years</div>
-          </div>
-
-          <div class="spark" id="trendPreview"></div>
-
-          <div class="cta-row">
-            <a class="btn" href="graphs.html">Explore graphs →</a>
-            <button class="btn secondary" type="button" id="exportBtn">Export summary</button>
-          </div>
-        </div>
-      </div>
     </section>
 
     <div class="footer">
-      <div>Built for consolidated audited financials and ratios (long-format table).</div>
     </div>
   </div>
 
