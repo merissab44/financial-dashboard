@@ -7,30 +7,31 @@ const LABELS = {
   surplus: ["Surplus / (Deficit)", "Surplus/(Deficit)", "Net Income"],
 };
 
+// remove the code 
 const DIMENSIONS = [
-  { code: "FN-01", name: "Backbone & Gen Ops", rollup: "Admin, indirect, management fees",
+  { name: "Backbone & Gen Ops", rollup: "Admin, indirect, management fees",
     csvLabels: ["1. Backbone and Gen Ops", "1. Backbone & Gen Ops", "FN-01 Backbone & Gen Ops"] },
 
-  { code: "FN-02", name: "Live & Thrive", rollup: "Buildings, capital improvements",
+  { name: "Live & Thrive", rollup: "Buildings, capital improvements",
     csvLabels: ["2. Live and Thrive", "2. Live & Thrive", "FN-02 Live & Thrive"] },
 
-  { code: "FN-03", name: "Data Trust & Fund", rollup: "Evaluation, research, data",
+  { name: "Data Trust & Fund", rollup: "Evaluation, research, data",
     csvLabels: ["3. Data Trust and Fund", "3. Data Trust & Fund", "FN-03 Data Trust & Fund"] },
 
-  { code: "FN-04", name: "Power Building", rollup: "Civic engagement, organizing",
+  { name: "Power Building", rollup: "Civic engagement, organizing",
     csvLabels: ["4. Power Building", "FN-04 Power Building"] },
 
-  { code: "FN-05", name: "Learn & Grow", rollup: "Youth programs, scholarships",
+  { name: "Learn & Grow", rollup: "Youth programs, scholarships",
     csvLabels: ["5. Learn and Grow", "5. Learn & Grow", "FN-05 Learn & Grow"] },
 
-  { code: "FN-06", name: "Safe & Connected", rollup: "Safety, ambassadors, community response",
+  { name: "Safe & Connected", rollup: "Safety, ambassadors, community response",
     csvLabels: ["6. Safe and Connected", "6. Safe & Connected", "FN-06 Safe & Connected"] },
 
   // These two are placeholders until we confirm the exact names used in your CSV
-  { code: "FN-07", name: "Work and Wealth", rollup: "Akoma Market Vendors, Akoma Consignment Fee, Economic Development",
+  { name: "Work and Wealth", rollup: "Akoma Market Vendors, Akoma Consignment Fee, Economic Development",
     csvLabels: ["7. Work and Wealth", "FN-07 Work and Wealth", "7."] },
 
-  { code: "FN-08", name: "Family Health and Wellbeing", rollup: "Healing Generations Institute, Medical Supplies, Clinical Services, Laboratory Fees, Medical Vaccines",
+  { name: "Family Health and Wellbeing", rollup: "Healing Generations Institute, Medical Supplies, Clinical Services, Laboratory Fees, Medical Vaccines",
     csvLabels: ["8. Family Health and Wellbeing", "FN-08 Family Health and Wellbeing", "8."] },
 ];
 
@@ -194,7 +195,7 @@ function renderForCol(lineMap, colIdx) {
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><span class="dim"><span class="dot ${dotClass}"></span>${d.code} ${d.name}</span></td>
+      <td><span class="dim"><span class="dot ${dotClass}"></span>${d.name}</span></td>
       <td>${d.rollup}</td>
       <td class="num">${fmtMoney(amount)}</td>
       <td class="num">${fmtPct(pct)}</td>
