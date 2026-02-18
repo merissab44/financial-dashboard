@@ -1,41 +1,50 @@
-// ========= CONFIG =========
-// Default CSV filename (must be in same folder as index.html on GitHub Pages)
+// ====== CONFIG ======
 const DEFAULT_CSV_PATH = "data/Rise_East_Budget_Cleaned.csv";
-console.log('using csv path:', DEFAULT_CSV_PATH);
 
-// Budget cover page labels (add variants if your CSV uses different wording)
-const BUDGET_LABELS = {
+const LABELS = {
   totalRevenue: ["Total Revenue"],
   totalExpenses: ["Total Expenses"],
   surplus: ["Surplus / (Deficit)", "Surplus/(Deficit)", "Net Income"],
 };
 
-// Strategic dimension lines found in the budget cover page
-const DIMENSION_EXPENSE_LINES = {
-  "FN-01": ["1. Backbone and Gen Ops", "1. Backbone & Gen Ops"],
-  "FN-02": ["2. Live and Thrive", "2. Live & Thrive"],
-  "FN-03": ["3. Data Trust and Fund", "3. Data Trust & Fund"],
-  "FN-04": ["4. Power Building"],
-  "FN-05": ["5. Learn and Grow", "5. Learn & Grow"],
-  "FN-06": ["6. Safe and Connected", "6. Safe & Connected"],
-};
+const DIMENSIONS = [
+  { code: "FN-01", name: "Backbone & Gen Ops", rollup: "Admin, indirect, management fees",
+    csvLabels: ["1. Backbone and Gen Ops", "1. Backbone & Gen Ops", "FN-01 Backbone & Gen Ops"] },
 
-// ========= DOM =========
-const el = {
-  importBtn: document.getElementById("importBtn"),
-  exportBtn: document.getElementById("exportBtn"),
-  csvFileInput: document.getElementById("csvFileInput"),
+  { code: "FN-02", name: "Live & Thrive", rollup: "Buildings, capital improvements",
+    csvLabels: ["2. Live and Thrive", "2. Live & Thrive", "FN-02 Live & Thrive"] },
 
-  // KPI values
-  kpiRevenue: document.getElementById("kpiRevenue"),
-  kpiExpenses: document.getElementById("kpiExpenses"),
-  kpiSurplus: document.getElementById("kpiSurplus"),
+  { code: "FN-03", name: "Data Trust & Fund", rollup: "Evaluation, research, data",
+    csvLabels: ["3. Data Trust and Fund", "3. Data Trust & Fund", "FN-03 Data Trust & Fund"] },
 
-  // UCOA table body (already exists in your HTML)
+  { code: "FN-04", name: "Power Building", rollup: "Civic engagement, organizing",
+    csvLabels: ["4. Power Building", "FN-04 Power Building"] },
+
+  { code: "FN-05", name: "Learn & Grow", rollup: "Youth programs, scholarships",
+    csvLabels: ["5. Learn and Grow", "5. Learn & Grow", "FN-05 Learn & Grow"] },
+
+  { code: "FN-06", name: "Safe & Connected", rollup: "Safety, ambassadors, community response",
+    csvLabels: ["6. Safe and Connected", "6. Safe & Connected", "FN-06 Safe & Connected"] },
+
+  // These two are placeholders until we confirm the exact names used in your CSV
+  { code: "FN-07", name: "Work and Wealth", rollup: "Akoma Market Vendors, Akoma Consignment Fee, Economic Development",
+    csvLabels: ["7. Work and Wealth", "FN-07 Work and Wealth", "7."] },
+
+  { code: "FN-08", name: "Family Health and Wellbeing", rollup: "Healing Generations Institute, Medical Supplies, Clinical Services, Laboratory Fees, Medical Vaccines",
+    csvLabels: ["8. Family Health and Wellbeing", "FN-08 Family Health and Wellbeing", "8."] },
+];
+
+
+// ====== DOM ======
+const dom = {
+  yearSelect: document.getElementById("yearSelect"),
+  kpiRevenue: document.getElementById("kpiQuick"),
+  kpiExpenses: document.getElementById("kpiCurrent"),
+  kpiSurplus: document.getElementById("kpiDebt"),
   ucoaBody: document.getElementById("ucoaBody"),
 };
 
-// ========= CSV PARSING =========
+// ====== CSV parsing ======
 function parseCSV(text) {
   const rows = [];
   let i = 0, field = "", row = [], inQuotes = false;
@@ -59,22 +68,22 @@ function parseCSV(text) {
     field += c;
     i++;
   }
-
   row.push(field);
   if (row.some(x => String(x || "").trim() !== "")) rows.push(row);
   return rows;
 }
 
-function norm(s) {
-  return String(s ?? "").trim().toLowerCase();
-}
+function norm(s) { return String(s ?? "").trim().toLowerCase(); }
 
 function parseMoney(v) {
   if (v == null) return null;
   const s = String(v).trim();
-  if (!s) return null;
+  if (!s || s === "-" || s === "$ -" || s.toLowerCase() === "n/a") return null;
+
   const neg = s.includes("(") && s.includes(")");
   const cleaned = s.replace(/[\$,]/g, "").replace(/[()\s]/g, "");
+  if (!cleaned || cleaned === "-") return null;
+
   const n = Number(cleaned);
   if (!Number.isFinite(n)) return null;
   return neg ? -n : n;
@@ -90,204 +99,150 @@ function fmtPct(n) {
   return `${(n * 100).toFixed(1)}%`;
 }
 
-// Detect header row (best effort)
+// ====== Structure detection for your cleaned CSV ======
 function findHeaderRow(rows) {
+  // cleaned file should have "Rise East Budgets" + "Year 0" on header row
   for (let r = 0; r < rows.length; r++) {
-    const joined = rows[r].join(" | ").toLowerCase();
-    if (joined.includes("year") && (joined.includes("budget") || joined.includes("actual") || joined.includes("july"))) {
-      return r;
-    }
+    const joined = rows[r].map(x => String(x || "").trim().toLowerCase()).join(" | ");
+    if (joined.includes("rise east budgets") && joined.includes("year 0")) return r;
+    if (joined.includes("year 0")) return r;
   }
   return 0;
 }
 
 function findLabelCol(rows, headerRow) {
-  const maxCols = Math.max(...rows.map(r => r.length));
-  let bestCol = 0, bestScore = -1;
-
-  for (let c = 0; c < maxCols; c++) {
-    let score = 0;
-    for (let r = headerRow + 1; r < rows.length; r++) {
-      const v = rows[r][c];
-      if (v && String(v).trim().length > 1) score++;
-    }
-    if (score > bestScore) { bestScore = score; bestCol = c; }
+  const header = rows[headerRow] || [];
+  for (let c = 0; c < header.length; c++) {
+    if (String(header[c] || "").trim().toLowerCase().includes("rise east budgets")) return c;
   }
-  return bestCol;
+  return 0;
 }
 
-function getValueCols(rows, headerRow, labelCol) {
+function getYearCols(rows, headerRow, labelCol) {
   const header = rows[headerRow] || [];
   const cols = [];
   for (let c = 0; c < header.length; c++) {
     if (c === labelCol) continue;
     const name = String(header[c] || "").trim();
     if (!name) continue;
-    cols.push({ idx: c, name });
+    if (name.toLowerCase().includes("year")) cols.push({ idx: c, name });
   }
   return cols;
 }
 
-// Build: label -> Map(colIdx -> number)
-function buildLineItemMap(rows, headerRow, labelCol, valueCols) {
-  const map = new Map();
+function buildLineMap(rows, headerRow, labelCol, yearCols) {
+  const map = new Map(); // label -> Map(colIdx->number)
   for (let r = headerRow + 1; r < rows.length; r++) {
     const label = String(rows[r][labelCol] || "").trim();
     if (!label) continue;
 
     const m = new Map();
-    for (const vc of valueCols) {
-      const n = parseMoney(rows[r][vc.idx]);
-      if (n != null) m.set(vc.idx, n);
+    for (const yc of yearCols) {
+      const n = parseMoney(rows[r][yc.idx]);
+      if (n != null) m.set(yc.idx, n);
     }
     if (m.size > 0) map.set(norm(label), m);
   }
   return map;
 }
 
-function getVal(lineMap, candidates, colIdx) {
+function getVal(map, candidates, colIdx) {
   for (const c of candidates) {
-    const entry = lineMap.get(norm(c));
+    const entry = map.get(norm(c));
     if (entry && entry.has(colIdx)) return entry.get(colIdx);
   }
   return null;
 }
 
-// ========= DASHBOARD RENDERING =========
-function updateBudgetKPIs(lineMap, colIdx) {
-  const rev = getVal(lineMap, BUDGET_LABELS.totalRevenue, colIdx);
-  const exp = getVal(lineMap, BUDGET_LABELS.totalExpenses, colIdx);
-  const sur = getVal(lineMap, BUDGET_LABELS.surplus, colIdx);
+// ====== Rendering ======
+function renderForCol(lineMap, colIdx) {
+  // KPIs
+  const rev = getVal(lineMap, LABELS.totalRevenue, colIdx);
+  const exp = getVal(lineMap, LABELS.totalExpenses, colIdx);
+  const sur = getVal(lineMap, LABELS.surplus, colIdx);
 
-  el.kpiRevenue.textContent = fmtMoney(rev);
-  el.kpiExpenses.textContent = fmtMoney(exp);
-  el.kpiSurplus.textContent = fmtMoney(sur);
-}
+  if (dom.kpiRevenue) dom.kpiRevenue.textContent = fmtMoney(rev);
+  if (dom.kpiExpenses) dom.kpiExpenses.textContent = fmtMoney(exp);
+  if (dom.kpiSurplus) dom.kpiSurplus.textContent = fmtMoney(sur);
 
-function updateUCOATable(lineMap, colIdx) {
-  // Prefer "Total Expenses" as denominator; otherwise sum known dimensions
-  let totalExpenses = getVal(lineMap, BUDGET_LABELS.totalExpenses, colIdx);
+  // Build FN-01..FN-08 table dynamically
+  if (!dom.ucoaBody) return;
+  dom.ucoaBody.innerHTML = "";
 
-  const dimAmounts = {};
-  for (const [dimCode, labelVariants] of Object.entries(DIMENSION_EXPENSE_LINES)) {
-    const v = getVal(lineMap, labelVariants, colIdx);
-    if (Number.isFinite(v)) dimAmounts[dimCode] = v;
+  // Collect amounts for each dimension
+  const amounts = {};
+  for (const d of DIMENSIONS) {
+    const v = getVal(lineMap, d.csvLabels, colIdx);
+    amounts[d.code] = Number.isFinite(v) ? v : null;
   }
 
-  if (!Number.isFinite(totalExpenses)) {
-    const sum = Object.values(dimAmounts).reduce((a, b) => a + (Number.isFinite(b) ? b : 0), 0);
-    totalExpenses = sum > 0 ? sum : null;
+  // Denominator for % of total
+  const totalExpenses = Number.isFinite(exp)
+    ? exp
+    : Object.values(amounts).reduce((sum, v) => sum + (Number.isFinite(v) ? v : 0), 0);
+
+  for (let i = 0; i < DIMENSIONS.length; i++) {
+    const d = DIMENSIONS[i];
+    const amount = amounts[d.code];
+
+    const pct = (Number.isFinite(amount) && Number.isFinite(totalExpenses) && totalExpenses !== 0)
+      ? amount / totalExpenses
+      : null;
+
+    // dot class: b1..b8 (if your CSS only has some, dots will still show)
+    const dotClass = `b${i + 1}`;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="dim"><span class="dot ${dotClass}"></span>${d.code} ${d.name}</span></td>
+      <td>${d.rollup}</td>
+      <td class="num">${fmtMoney(amount)}</td>
+      <td class="num">${fmtPct(pct)}</td>
+    `;
+    dom.ucoaBody.appendChild(tr);
   }
-
-  // Fill your existing table rows (Amount + % columns)
-  const rows = Array.from(el.ucoaBody.querySelectorAll("tr"));
-  for (const tr of rows) {
-    const firstCellText = tr.querySelector("td")?.innerText || "";
-    const dimMatch = firstCellText.match(/\bFN-\d{2}\b/i);
-    if (!dimMatch) continue;
-
-    const dim = dimMatch[0].toUpperCase(); // e.g. "FN-01"
-    const amount = dimAmounts[dim] ?? null;
-
-    const tds = tr.querySelectorAll("td");
-    const amountCell = tds[2];
-    const pctCell = tds[3];
-
-    if (amountCell) amountCell.textContent = fmtMoney(amount);
-
-    if (pctCell) {
-      const pct = (Number.isFinite(amount) && Number.isFinite(totalExpenses) && totalExpenses !== 0)
-        ? (amount / totalExpenses)
-        : null;
-      pctCell.textContent = fmtPct(pct);
-    }
-  }
-
-  // Save state for export
-  window.__BUDGET_STATE__ = { dimAmounts, totalExpenses };
 }
 
-function renderFromCSVText(csvText) {
-  const rows = parseCSV(csvText);
-  const headerRow = findHeaderRow(rows);
-  const labelCol = findLabelCol(rows, headerRow);
-  const valueCols = getValueCols(rows, headerRow, labelCol);
-  const lineMap = buildLineItemMap(rows, headerRow, labelCol, valueCols);
 
-  // Use the latest value column (right-most) as “Latest”
-  const latestColIdx = valueCols.length ? valueCols[valueCols.length - 1].idx : null;
+function wireDropdown(yearCols, lineMap) {
+  if (!dom.yearSelect) return;
 
-  if (latestColIdx == null) return;
+  dom.yearSelect.innerHTML = "";
+  yearCols.forEach(yc => {
+    const opt = document.createElement("option");
+    opt.value = String(yc.idx);
+    opt.textContent = yc.name;
+    dom.yearSelect.appendChild(opt);
+  });
 
-  updateBudgetKPIs(lineMap, latestColIdx);
-  updateUCOATable(lineMap, latestColIdx);
+  // default: latest (right-most)
+  const latest = yearCols[yearCols.length - 1];
+  dom.yearSelect.value = String(latest.idx);
+  renderForCol(lineMap, latest.idx);
+
+  dom.yearSelect.addEventListener("change", () => {
+    renderForCol(lineMap, Number(dom.yearSelect.value));
+  });
 }
 
-// ========= IMPORT / EXPORT =========
-async function loadDefaultCSV() {
+// ====== Init ======
+document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const res = await fetch(DEFAULT_CSV_PATH, { cache: "no-store" });
+    const res = await fetch(encodeURI(DEFAULT_CSV_PATH), { cache: "no-store" });
     if (!res.ok) throw new Error(`CSV fetch failed: ${res.status}`);
+
     const text = await res.text();
-    renderFromCSVText(text);
+    const rows = parseCSV(text);
+
+    const headerRow = findHeaderRow(rows);
+    const labelCol = findLabelCol(rows, headerRow);
+    const yearCols = getYearCols(rows, headerRow, labelCol);
+    const lineMap = buildLineMap(rows, headerRow, labelCol, yearCols);
+
+    if (!yearCols.length) throw new Error("No year columns detected (expected headers like 'Year 0').");
+    wireDropdown(yearCols, lineMap);
   } catch (e) {
-    console.warn("Default CSV did not load. Use Import consolidated file.", e);
+    console.error("Budget CSV load failed:", e);
+    // keep Loading... visible so you know it didn't populate
   }
-}
-
-function wireButtons() {
-  if (el.importBtn && el.csvFileInput) {
-    el.importBtn.addEventListener("click", () => el.csvFileInput.click());
-    el.csvFileInput.addEventListener("change", () => {
-      const file = el.csvFileInput.files && el.csvFileInput.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = () => renderFromCSVText(String(reader.result || ""));
-      reader.readAsText(file);
-    });
-  }
-
-  if (el.exportBtn) {
-    el.exportBtn.addEventListener("click", () => {
-      const state = window.__BUDGET_STATE__;
-      if (!state) {
-        alert("No data loaded yet. Import a CSV first.");
-        return;
-      }
-
-      const lines = [];
-      lines.push("Metric,Value");
-      lines.push(`Total Revenue,${el.kpiRevenue.textContent}`);
-      lines.push(`Total Expenses,${el.kpiExpenses.textContent}`);
-      lines.push(`Surplus/(Deficit),${el.kpiSurplus.textContent}`);
-      lines.push("");
-
-      lines.push("Strategic Dimension,Amount,% of Total Expenses");
-      const trs = Array.from(el.ucoaBody.querySelectorAll("tr"));
-      for (const tr of trs) {
-        const dimText = tr.querySelector("td")?.innerText?.replace(/\s+/g, " ").trim() || "";
-        const amount = tr.querySelectorAll("td")[2]?.innerText?.trim() || "";
-        const pct = tr.querySelectorAll("td")[3]?.innerText?.trim() || "";
-        if (dimText) lines.push(`"${dimText}",${amount},${pct}`);
-      }
-
-      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "budget_cover_summary.csv";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    });
-  }
-}
-
-// ========= INIT =========
-document.addEventListener("DOMContentLoaded", () => {
-  wireButtons();
-  loadDefaultCSV();
 });
