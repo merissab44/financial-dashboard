@@ -226,6 +226,64 @@ function wireDropdown(yearCols, lineMap) {
   });
 }
 
+function buildSparkSVG(values, { width = 360, height = 80, padding = 8 } = {}) {
+  const nums = values.map(v => (Number.isFinite(v) ? v : null));
+  const clean = nums.filter(v => v != null);
+
+  if (clean.length < 2) {
+    return `<div class="muted">Not enough data to preview trend.</div>`;
+  }
+
+  const min = Math.min(...clean);
+  const max = Math.max(...clean);
+  const range = (max - min) || 1;
+
+  const w = width, h = height, p = padding;
+  const innerW = w - p * 2;
+  const innerH = h - p * 2;
+
+  const xStep = innerW / (nums.length - 1);
+
+  function xy(i, v) {
+    const x = p + i * xStep;
+    const y = p + (1 - (v - min) / range) * innerH;
+    return [x, y];
+  }
+
+  let d = "";
+  nums.forEach((v, i) => {
+    if (v == null) return;
+    const [x, y] = xy(i, v);
+    d += (d ? " L " : "M ") + `${x.toFixed(2)} ${y.toFixed(2)}`;
+  });
+
+  // A simple baseline
+  const baseY = p + innerH;
+
+  return `
+    <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" role="img" aria-label="Trend preview">
+      <path d="M ${p} ${baseY} L ${w - p} ${baseY}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+      <path d="${d}" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <div class="muted" style="display:flex; justify-content:space-between; gap:10px; margin-top:8px;">
+      <span>Min: ${fmtMoney(min)}</span>
+      <span>Max: ${fmtMoney(max)}</span>
+    </div>
+  `;
+}
+
+function renderTrendPreview(lineMap, yearCols) {
+  const target = document.getElementById("trendPreview");
+  if (!target) return;
+
+  // Choose what to preview:
+  // Surplus is usually the most meaningful “at a glance”
+  const series = yearCols.map(yc => getVal(lineMap, LABELS.surplus, yc.idx));
+
+  target.innerHTML = buildSparkSVG(series, { height: 90 });
+}
+
+
 // ====== Init ======
 document.addEventListener("DOMContentLoaded", async () => {
   try {
