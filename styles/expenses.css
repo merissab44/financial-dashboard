@@ -1,0 +1,99 @@
+:root {
+    --tan-header: #e9e4d4;
+    --brand-black: #1a1a1a;
+    --brand-white: #ffffff;
+    --muted-gray: #777777;
+    --status-gray: #6b7280;
+    --bg-light: #f9f9fb;
+    --border-subtle: #eeeeee;
+    --shadow-soft: 0 4px 12px rgba(0,0,0,0.05);
+    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    font-family: var(--font-main);
+    margin: 0;
+    background-color: var(--bg-light);
+    color: #333;
+}
+
+/* Dashboard Navigation & Tab Architecture */
+.dashboard-nav {
+    display: flex;
+    align-items: center;
+    background-color: var(--brand-white);
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #555;
+    padding: 8px 16px;
+    border-radius: 4px 4px 0 0;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: var(--tan-header);
+    color: #000;
+    font-weight: 600;
+}
+
+/* Card-based Layout Components */
+.kpi-card, .metric-card {
+    background: var(--brand-white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    border: 1px solid var(--border-subtle);
+}
+
+.kpi-label {
+    font-size: 0.85rem;
+    color: var(--muted-gray);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.kpi-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--brand-black);
+}
+
+/* Filter Controls & Primary Actions */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-group label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--status-gray);
+}
+
+.btn-primary {
+    background-color: var(--brand-black);
+    color: var(--brand-white);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}

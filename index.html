@@ -8,34 +8,10 @@
 </head>
 
 <body>
-  <!-- NAVBAR -->
-  <div class="navbar">
-    <div class="navbar__brand">
-      Rise East Dashboard
-    </div>
-
-    <nav class="navbar__links">
-      <a class="active" href="index.html">Home</a>
-      <a href="graphs.html">Graphs</a>
-    </nav>
-  </div>
-
-  <div class="container">
-    <!-- Page intro -->
-    <div class="page-title">
-      <div>
-        <h1>Financial overview</h1>
-        <p>
-          Executive snapshot of liquidity, leverage, and mission-aligned spending using your Unified Chart of Accounts.
-          Use <strong>Graphs</strong> for deeper filters and trend comparisons across orgs and years.
-        </p>
-      </div>
-
-      <div class="actions">
-        <a class="btn secondary" href="graphs.html">Open Graph Dashboard</a>
-      </div>
-    </div>
-
+  <!-- navbar -->
+  <header class="main-header">
+    <div id="global-nav"></div>
+  </header>
     <section class="kpi-grid" style="margin-bottom: 14px;">
       <div class="card kpi">
         <div class="label">Select year</div>
@@ -129,6 +105,7 @@
     </div>
   </div>
 
+  <script src="scripts/nav-active.js"></script>
   <script src="scripts/ucoa.js"></script>
 
 </body>

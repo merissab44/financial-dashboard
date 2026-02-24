@@ -1,0 +1,97 @@
+:root {
+    --tan-header: #e9e4d4;
+    --brand-black: #1a1a1a;
+    --bg-light: #f9f9fb;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --success-green: #22c55e;
+    --caution-yellow: #f59e0b;
+    --deficit-red: #ef4444;
+}
+
+body {
+    background-color: var(--bg-light);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navigation & Active States */
+.nav-link.active, .nav-link:hover {
+    background-color: var(--tan-header) !important;
+    color: #000 !important;
+    font-weight: 600;
+}
+
+/* Button UI */
+.btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn.active { background: var(--brand-black); color: #fff; }
+.btn.secondary { background: #fff; color: var(--brand-black); border: 1px solid var(--border-color); }
+
+/* Table Architecture */
+.table-wrap {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background-color: var(--tan-header);
+    color: var(--brand-black);
+    font-size: 12px;
+    text-transform: uppercase;
+    padding: 12px;
+    text-align: left;
+    letter-spacing: 0.5px;
+}
+
+tbody td {
+    font-size: 13px;
+    padding: 14px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Strategic Dimension Dots */
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.dot-fn01 { background: #2a66ff; }
+.dot-fn02 { background: #22c55e; }
+.dot-fn03 { background: #f59e0b; }
+.dot-fn04 { background: #a855f7; }
+.dot-fn05 { background: #06b6d4; }
+.dot-fn06 { background: #ef4444; }
+.dot-fn07 { background: #f97316; }
+.dot-fn08 { background: #22c55e; }
+
+.num { text-align: right; font-family: 'JetBrains Mono', monospace; }
+
+@media (max-width: 980px) {
+    .dashboard-nav { flex-direction: column; gap: 15px; }
+    .hero h1 { font-size: 2rem; }
+    .table-wrap { overflow-x: auto; }
+    table { min-width: 800px; } /* Ensure horizontal scroll on mobile */
+}

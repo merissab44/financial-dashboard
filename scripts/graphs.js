@@ -1,77 +1,26 @@
-// graphs.js (flexible selectors + chart type switching + year range + outlier handling)
-// Requires Chart.js loaded BEFORE this file.
-
+/**
+ * graphs.js - Powers the Dashboard Financial Performance
+ * Data Source: audited_ratios_input.csv
+ */
 const DATA_PATH = "data/audited_ratios_input.csv";
 let __chart = null;
 
-// ---------------- Helpers ----------------
-function pickEl(selectors) {
-  for (const s of selectors) {
-    const el = document.querySelector(s);
-    if (el) return el;
-  }
-  return null;
-}
-
 function parseNumber(v) {
-  const x = Number(String(v ?? "").replace(/,/g, "").trim());
+  const raw = String(v ?? "").trim();
+  if (!raw) return null;
+  const x = Number(raw.replace(/,/g, ""));
   return Number.isFinite(x) ? x : null;
 }
 
 function safeDiv(a, b) {
-  const A = parseNumber(a), B = parseNumber(b);
+  const A = parseNumber(a);
+  const B = parseNumber(b);
   if (A == null || B == null || B === 0) return null;
   return A / B;
 }
 
-// Hide liquidity ratios when current liabilities are too tiny (prevents 6000x skew)
-const MIN_LIABILITY_FOR_LIQUIDITY_RATIOS = 1000;
-
 function liquidityDiv(a, b) {
-  const A = parseNumber(a), B = parseNumber(b);
-  if (A == null || B == null) return null;
-  if (B < MIN_LIABILITY_FOR_LIQUIDITY_RATIOS) return null;
-  return A / B;
-}
-// Calculations for ratios. 
-const METRICS = {
-  "Quick Ratio": (r) => liquidityDiv(r.quick_assets, r.current_liabilities),
-  "Current Ratio": (r) => liquidityDiv(r.current_assets, r.current_liabilities),
-  "Debt Ratio": (r) => safeDiv(r.total_liabilities, r.total_unrestricted_net_assets),
-};
-
-//Logic that determines color based on ratio thresholds (red/yellow/green)
-function statusColor(metricName, v) {
-  if (v == null || !Number.isFinite(v)) return "#6b7280"; // gray for missing
-
-  if (metricName === "Current Ratio") {
-    if (v < 1) return "#ef4444";          // red
-    if (v < 1.5) return "#f59e0b";        // yellow
-    return "#22c55e";                      // green (>= 1.5)
-  }
-
-  if (metricName === "Quick Ratio") {
-    if (v >= 3) return "#ef4444";         // red
-    if (v > 2 && v < 3) return "#f59e0b"; // yellow
-    if (v >= 1 && v <= 2) return "#22c55e"; // green
-    return "#f59e0b";                      // <1 treat as caution (yellow)
-  }
-
-  if (metricName === "Debt Ratio") {
-    if (v > 1) return "#ef4444";          // red
-    if (v > 0.5) return "#f59e0b";        // yellow
-    return "#22c55e";                      // green (<= 0.5)
-  }
-
-  return "#3b82f6"; // fallback (blue)
-}
-
-function lastFinite(arr) {
-  for (let i = arr.length - 1; i >= 0; i--) {
-    const v = arr[i];
-    if (v != null && Number.isFinite(v)) return v;
-  }
-  return null;
+  return safeDiv(a, b);
 }
 
 function parseCSV(text) {
@@ -82,28 +31,44 @@ function parseCSV(text) {
     const c = text[i];
 
     if (c === '"') {
-      if (inQuotes && text[i + 1] === '"') { field += '"'; i += 2; continue; }
-      inQuotes = !inQuotes; i++; continue;
+      if (inQuotes && text[i + 1] === '"') {
+        field += '"';
+        i += 2;
+        continue;
+      }
+      inQuotes = !inQuotes;
+      i++;
+      continue;
     }
-    if (!inQuotes && c === ",") { row.push(field); field = ""; i++; continue; }
+
+    if (!inQuotes && c === ",") {
+      row.push(field);
+      field = "";
+      i++;
+      continue;
+    }
+
     if (!inQuotes && (c === "\n" || c === "\r")) {
       if (c === "\r" && text[i + 1] === "\n") i++;
-      row.push(field); field = "";
+      row.push(field);
+      field = "";
       if (row.some(x => String(x || "").trim() !== "")) rows.push(row.map(x => String(x || "").trim()));
       row = [];
       i++;
       continue;
     }
+
     field += c;
     i++;
   }
+
   row.push(field);
   if (row.some(x => String(x || "").trim() !== "")) rows.push(row.map(x => String(x || "").trim()));
   return rows;
 }
 
 function toObjects(rows) {
-  const header = rows[0].map(h => h.trim());
+  const header = (rows[0] ?? []).map(h => String(h ?? "").trim());
   return rows.slice(1).map(r => {
     const o = {};
     for (let i = 0; i < header.length; i++) o[header[i]] = r[i] ?? "";
@@ -115,30 +80,64 @@ function uniq(arr) {
   return Array.from(new Set(arr)).filter(Boolean);
 }
 
-async function loadData() {
-  const res = await fetch(encodeURI(DATA_PATH), { cache: "no-store" });
-  if (!res.ok) throw new Error(`CSV fetch failed: ${res.status} (${DATA_PATH})`);
-  const text = await res.text();
-  const objs = toObjects(parseCSV(text));
-
-  return objs.map(o => ({
-    org: String(o.org || "").trim(),
-    year: Number(o.year),
-    current_assets: o.current_assets,
-    quick_assets: o.quick_assets,
-    current_liabilities: o.current_liabilities,
-    total_liabilities: o.total_liabilities,
-    total_unrestricted_net_assets: o.total_unrestricted_net_assets,
-  })).filter(r => r.org && Number.isFinite(r.year));
-}
-
 function destroyChart() {
   if (__chart) __chart.destroy();
   __chart = null;
 }
 
-/*creates a line chart with the given labels, datasets, and title. 
-It first destroys any existing chart to prevent memory leaks or overlapping charts. */
+function statusColor(metricName, v) {
+  if (v == null || !Number.isFinite(v)) return "#6b7280";
+
+  if (metricName === "Current Ratio") {
+    if (v < 1) return "#ef4444";
+    if (v < 1.5) return "#f59e0b";
+    return "#22c55e";
+  }
+
+  if (metricName === "Quick Ratio") {
+    if (v >= 3) return "#ef4444";
+    if (v > 2 && v < 3) return "#f59e0b";
+    if (v >= 1 && v <= 2) return "#22c55e";
+    return "#f59e0b";
+  }
+
+  if (metricName === "Debt Ratio") {
+    if (v > 1) return "#ef4444";
+    if (v > 0.5) return "#f59e0b";
+    return "#22c55e";
+  }
+
+  return "#3b82f6";
+}
+
+function metricToId(metricName) {
+  return (
+    "val-" +
+    metricName
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\//g, "-")
+      .replace(/[^a-z0-9\-]/g, "")
+  );
+}
+
+const METRIC_DEFS = [
+  {
+    name: "Current Ratio",
+    requires: ["current_assets", "current_liabilities"],
+    calc: (r) => liquidityDiv(r.current_assets, r.current_liabilities),
+  },
+  {
+    name: "Quick Ratio",
+    requires: ["quick_assets", "current_liabilities"],
+    calc: (r) => liquidityDiv(r.quick_assets, r.current_liabilities),
+  },
+  {
+    name: "Debt Ratio",
+    requires: ["total_liabilities", "total_unrestricted_net_assets"],
+    calc: (r) => safeDiv(r.total_liabilities, r.total_unrestricted_net_assets),
+  },
+];
 
 function renderLine(canvas, labels, datasets, title) {
   destroyChart();
@@ -150,19 +149,10 @@ function renderLine(canvas, labels, datasets, title) {
       maintainAspectRatio: false,
       interaction: { mode: "nearest", intersect: false },
       plugins: { title: { display: true, text: title } },
-      scales: { y: { 
-        max: 20,
-        ticks: { callback: (v) => Number(v).toFixed(2) } 
-      } 
-    }
-    }
+      scales: { y: { ticks: { callback: (v) => Number(v).toFixed(2) } } },
+    },
   });
 }
-
-/* creates bar chart for comparing orgs for a single year. 
-It uses the same destroyChart function to clear any existing chart before rendering the new one. 
-The bars are colored based on the statusColor function, 
-which assigns colors according to predefined thresholds for each metric.*/ 
 
 function renderGroupedBar(canvas, labels, datasets, title) {
   destroyChart();
@@ -173,12 +163,28 @@ function renderGroupedBar(canvas, labels, datasets, title) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: { title: { display: true, text: title } },
-      scales: { y: { ticks: { callback: (v) => Number(v).toFixed(2) } } }
-    }
+      scales: {
+        y: {
+          max: 20,
+          ticks: { callback: (v) => Number(v).toFixed(2) },
+        },
+      },
+    },
   });
 }
 
-function setSelectOptions(selectEl, values, includeAll = false) {
+function updateRatioCards(row) {
+  for (const def of METRIC_DEFS) {
+    const id = metricToId(def.name);
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const val = row ? def.calc(row) : null;
+    el.textContent = Number.isFinite(val) ? val.toFixed(2) : "—";
+    el.style.color = statusColor(def.name, val);
+  }
+}
+
+function setSelectOptions(selectEl, values, includeAll) {
   if (!selectEl) return;
   selectEl.innerHTML = "";
 
@@ -191,156 +197,128 @@ function setSelectOptions(selectEl, values, includeAll = false) {
 
   for (const v of values) {
     const opt = document.createElement("option");
-    opt.value = v;                 // ✅ keep real value (lowercase key)
-    opt.textContent = String(v).toUpperCase(); // ✅ display uppercase
+    opt.value = v;
+    opt.textContent = v;
     selectEl.appendChild(opt);
   }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+async function loadDashboard() {
   if (typeof Chart === "undefined") {
-    console.error("Chart.js not loaded. Make sure Chart.js script is included before graphs.js");
+    console.error("Chart.js not loaded. Make sure the Chart.js script is included before graphs.js");
     return;
   }
 
-  // links to graphs page with #chart=...
-  const orgSelect = pickEl(["#orgSelect", "#organizationSelect", "select[name='organization']"]);
-  const chartTypeSelect = pickEl(["#chartTypeSelect", "#chartType", "select[name='chartType']"]);
-  const ratioSelect = pickEl(["#ratioSelect", "#metricSelect", "select[name='ratio']"]);
-  const startYearEl = document.getElementById("yearMin");
-  const endYearEl   = document.getElementById("yearMax");  
-  const applyBtn = pickEl(["#applyBtn", "button#apply", "button"]);
-
-  // grabs the canvas element where the chart will be rendered.
+  const orgSelect = document.getElementById("orgSelect");
+  const ratioSelect = document.getElementById("ratioSelect");
+  const chartTypeSelect = document.getElementById("chartTypeSelect");
+  const yearMinEl = document.getElementById("yearMin");
+  const yearMaxEl = document.getElementById("yearMax");
+  const applyBtn = document.getElementById("applyBtn");
   const canvas = document.getElementById("ratioChart");
+
   if (!canvas) {
-    console.error("No canvas found on page.");
+    console.error("No canvas found (#ratioChart). ");
     return;
   }
 
   let data;
   try {
-    data = await loadData();
+    const res = await fetch(encodeURI(DATA_PATH), { cache: "no-store" });
+    if (!res.ok) throw new Error(`CSV fetch failed: ${res.status} (${DATA_PATH})`);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    const objs = toObjects(rows);
+
+    data = objs
+      .map(o => ({
+        org: String(o.org || "").trim(),
+        year: Number(o.year),
+        current_assets: o.current_assets,
+        quick_assets: o.quick_assets,
+        current_liabilities: o.current_liabilities,
+        total_liabilities: o.total_liabilities,
+        total_unrestricted_net_assets: o.total_unrestricted_net_assets,
+      }))
+      .filter(r => r.org && Number.isFinite(r.year));
+
+    if (!data.length) {
+      console.error("No rows loaded from audited_ratios_input.csv");
+      return;
+    }
   } catch (e) {
     console.error(e);
     return;
   }
 
-  const orgsAll = uniq(data.map(r => r.org)).sort();
+  const orgs = uniq(data.map(r => r.org)).sort();
   const yearsAll = uniq(data.map(r => r.year)).sort((a, b) => a - b);
 
-  // Populate dropdowns if needed
-  if (orgSelect && orgSelect.options.length <= 1) setSelectOptions(orgSelect, orgsAll, true);
-  // If your org select uses uppercase labels, map back:
-  function normalizeOrg(v) {
-    if (!v || v === "All") return "All";
-    const lower = v.toLowerCase();
-    const found = orgsAll.find(o => o.toLowerCase() === lower);
-    return found || v;
-  }
+  setSelectOptions(orgSelect, orgs, true);
+  setSelectOptions(ratioSelect, METRIC_DEFS.map(d => d.name), false);
 
-  if (ratioSelect && ratioSelect.options.length <= 1) setSelectOptions(ratioSelect, Object.keys(METRICS), false);
-
-  // Default years
-  if (startYearEl && !startYearEl.value) startYearEl.value = String(yearsAll[0]);
-  if (endYearEl && !endYearEl.value) endYearEl.value = String(yearsAll[yearsAll.length - 1]);
+  if (yearMinEl && !yearMinEl.value) yearMinEl.value = String(yearsAll[0]);
+  if (yearMaxEl && !yearMaxEl.value) yearMaxEl.value = String(yearsAll[yearsAll.length - 1]);
 
   function apply() {
-    // ---- Read UI ----
-    const orgValRaw = orgSelect ? orgSelect.value : "All";
-    const chartType = chartTypeSelect ? chartTypeSelect.value : "Multi-Line (Trends Over Time)";
-    const metricName = ratioSelect ? ratioSelect.value : "Quick Ratio";
-    const metricFn = METRICS[metricName] || METRICS["Quick Ratio"];
-  
-    // Years (your IDs are yearMin/yearMax)
-    const y0 = Number(startYearEl?.value);
-    const y1 = Number(endYearEl?.value);
-  
-    const start = Number.isFinite(y0) ? y0 : yearsAll[0];
-    const end   = Number.isFinite(y1) ? y1 : yearsAll[yearsAll.length - 1];
-  
-    const from = Math.min(start, end);
-    const to   = Math.max(start, end);
-  
-    // ---- Normalize org (BCZ dropdown vs bcz in CSV) ----
-    const orgVal =
-      (orgValRaw && orgValRaw !== "All")
-        ? (orgsAll.find(o => o.toLowerCase() === String(orgValRaw).toLowerCase()) || orgValRaw)
-        : "All";
-  
-    const orgList = (orgVal && orgVal !== "All") ? [orgVal] : orgsAll;
-  
-    // ---- Filter data to year range ----
-    const years = yearsAll.filter(y => y >= from && y <= to);
-  
-    // Build fast lookup map (org__year -> row)
+    const orgVal = orgSelect ? orgSelect.value : "All";
+    const metricName = ratioSelect ? ratioSelect.value : METRIC_DEFS[0].name;
+    const def = METRIC_DEFS.find(d => d.name === metricName) || METRIC_DEFS[0];
+    const chartType = String(chartTypeSelect?.value || "");
+
+    const y0 = Number(yearMinEl?.value);
+    const y1 = Number(yearMaxEl?.value);
+    const from = Number.isFinite(y0) ? y0 : yearsAll[0];
+    const to = Number.isFinite(y1) ? y1 : yearsAll[yearsAll.length - 1];
+    const start = Math.min(from, to);
+    const end = Math.max(from, to);
+    const years = yearsAll.filter(y => y >= start && y <= end);
+
+    const orgList = orgVal === "All" ? orgs : [orgVal];
+
     const idx = new Map();
     for (const r of data) {
-      if (r.year >= from && r.year <= to) idx.set(`${r.org}__${r.year}`, r);
+      if (r.year < start || r.year > end) continue;
+      idx.set(`${r.org}__${r.year}`, r);
     }
-  
-    // ---- Branch: Grouped Bar vs Multi-Line ----
-    const ct = String(chartType || "").toLowerCase();
-    const isBar = ct.includes("bar");           // ✅ catches "bar", "grouped bar", etc.
-    if (isBar) {
-      // Grouped bar compares orgs for ONE year (use end of range)
-      // Pick the latest year that actually exists in the filtered range
-      let chosenYear = years.length ? years[years.length - 1] : null;
 
-      // Fallback: if the selected range has no years, use the global latest year
-      if (!chosenYear) chosenYear = yearsAll[yearsAll.length - 1];
-  
+    const isBar = chartType.toLowerCase().includes("bar");
+    if (isBar) {
+      const chosenYear = years.length ? years[years.length - 1] : yearsAll[yearsAll.length - 1];
       const labels = orgList.map(o => o.toUpperCase());
       const values = orgList.map(o => {
-        // Try exact chosenYear first
-        let row = idx.get(`${o}__${chosenYear}`);
-      
-        // If missing, fall back to the latest available year <= chosenYear within the selected range
-        if (!row) {
-          for (let i = years.length - 1; i >= 0; i--) {
-            const y = years[i];
-            row = idx.get(`${o}__${y}`);
-            if (row) break;
-          }
-        }
-      
-        return row ? metricFn(row) : null;
-      });      
-  
-      // If everything is null, warn in console (usually org mismatch or missing year)
-      if (values.every(v => v == null)) {
-        console.warn("No data found for grouped bar. Check org keys & selected year.", { orgList, chosenYear });
-      }
-  
-      const colors = values.map(v => statusColor(metricName, v));
+        const row = idx.get(`${o}__${chosenYear}`);
+        return row ? def.calc(row) : null;
+      });
+      const colors = values.map(v => statusColor(def.name, v));
 
-    renderGroupedBar(
-      canvas,
-      labels,
-      [{
-        label: `${metricName} • ${chosenYear}`,
-        data: values,
-        backgroundColor: colors,
-        borderColor: colors,
-        borderWidth: 1,
-      }],
-      `${metricName} • ${chosenYear}`
-    );
+      renderGroupedBar(
+        canvas,
+        labels,
+        [
+          {
+            label: `${def.name} • ${chosenYear}`,
+            data: values,
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 1,
+          },
+        ],
+        `${def.name} • ${chosenYear}`
+      );
 
-  
+      const rowForCards = orgVal !== "All" ? idx.get(`${orgVal}__${chosenYear}`) : null;
+      updateRatioCards(rowForCards);
       return;
     }
-  
-    // ---- Multi-Line: trend over years ----
+
     const datasets = orgList.map(org => {
       const series = years.map(y => {
         const row = idx.get(`${org}__${y}`);
-        return row ? metricFn(row) : null;
+        return row ? def.calc(row) : null;
       });
-    
-      const latest = lastFinite(series);
-      const c = statusColor(metricName, latest);
-    
+      const last = [...series].reverse().find(v => v != null && Number.isFinite(v)) ?? null;
+      const c = statusColor(def.name, last);
       return {
         label: org.toUpperCase(),
         data: series,
@@ -354,25 +332,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         pointHoverRadius: 5,
       };
     });
-    
-  
-    // If all datasets are empty, warn in console
-    const allEmpty = datasets.every(ds => ds.data.every(v => v == null));
-    if (allEmpty) {
-      console.warn("No data available for selected filters.", { orgList, from, to, metricName });
-    }
-  
-    renderLine(canvas, years.map(String), datasets, metricName);
-  }  
 
-  applyBtn?.addEventListener("click", (e) => { e.preventDefault(); apply(); });
+    renderLine(canvas, years.map(String), datasets, def.name);
+
+    const cardYear = years.length ? years[years.length - 1] : yearsAll[yearsAll.length - 1];
+    const rowForCards = orgVal !== "All" ? idx.get(`${orgVal}__${cardYear}`) : null;
+    updateRatioCards(rowForCards);
+  }
+
+  applyBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    apply();
+  });
 
   orgSelect?.addEventListener("change", apply);
   ratioSelect?.addEventListener("change", apply);
   chartTypeSelect?.addEventListener("change", apply);
-  startYearEl?.addEventListener("change", apply);
-  endYearEl?.addEventListener("change", apply);
+  yearMinEl?.addEventListener("change", apply);
+  yearMaxEl?.addEventListener("change", apply);
 
   apply();
+}
 
+document.addEventListener("DOMContentLoaded", () => {
+  loadDashboard();
 });
