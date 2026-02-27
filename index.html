@@ -16,7 +16,7 @@
       <div class="card kpi">
         <div class="label">Select year</div>
     
-        <select id="yearSelect" class="kpi-select styled-dropdown">
+        <select id="year-filter" class="kpi-select styled-dropdown">
           <option>Loading...</option>
         </select>
       </div>
@@ -29,21 +29,21 @@
 
       <div class="card kpi">
         <div class="label">Total Revenue</div>
-        <div class="value" id="kpiRevenue">—</div>
+        <div class="value" id="total-revenue">—</div>
         <div class="sub">
         </div>
       </div>
     
       <div class="card kpi">
         <div class="label">Total Expenses</div>
-        <div class="value" id="kpiExpenses">—</div>
+        <div class="value" id="total-expenses">—</div>
         <div class="sub">
         </div>
       </div>
     
       <div class="card kpi">
         <div class="label">Surplus / (Deficit)</div>
-        <div class="value" id="kpiSurplus">—</div>
+        <div class="value" id="surplus-value">—</div>
         <div class="sub">
         </div>
       </div>
@@ -103,9 +103,9 @@
 
     <div class="footer">
     </div>
-  </div>
 
   <script src="scripts/nav-active.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="scripts/ucoa.js"></script>
 
 </body>
