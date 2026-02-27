@@ -12,6 +12,64 @@
         <div id="global-nav"></div>
     </header>
 
+    <div class="investment-dashboard" style="margin-top: 20px;">
+  
+  <!-- Top Navigation: Title & Dropdown -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="color: #0f172a; margin: 0;">Investment Area Deep Dive</h2>
+    <div>
+      <label for="area-filter" style="font-weight: 600; margin-right: 8px; color: #334155;">Select Strategic Area:</label>
+      <select id="area-filter" class="styled-dropdown">
+        <option value="1" selected>1. Backbone and Gen Ops</option>
+        <option value="2">2. Live and Thrive</option>
+        <option value="3">3. Data Trust and Fund</option>
+        <option value="4">4. Power Building</option>
+        <option value="5">5. Learn and Grow</option>
+        <option value="6">6. Safe and Connected</option>
+        <option value="7">7. Work and Wealth</option>
+        <option value="8">8. Family Health and Wellbeing</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Dynamic KPI Cards for the Selected Area -->
+  <div class="kpi-dashboard-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px;">
+    <div class="kpi-card" style="border-left: 4px solid #059669;">
+      <h3>Year 2 Projected Revenue</h3>
+      <p id="area-rev" class="kpi-value">Loading...</p>
+    </div>
+    <div class="kpi-card" style="border-left: 4px solid #dc2626;">
+      <h3>Year 2 Projected Expenses</h3>
+      <p id="area-exp" class="kpi-value">Loading...</p>
+    </div>
+    <div class="kpi-card" style="border-left: 4px solid #2563eb;">
+      <h3>Year 2 Funding Gap / Surplus</h3>
+      <p id="area-gap" class="kpi-value">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Detailed Table Container -->
+  <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-x: auto;">
+    <h3 id="area-table-title" style="margin-top: 0; margin-bottom: 15px; color: #0f172a;">Line Item Details</h3>
+    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+      <thead>
+        <tr style="border-bottom: 2px solid #cbd5e1; background: #f8fafc; color: #334155;">
+          <th style="padding: 12px; width: 40%;">Expense Category / Program</th>
+          <th style="padding: 12px; text-align: right;">Y1 Budget</th>
+          <th style="padding: 12px; text-align: right;">Y1 Actuals</th>
+          <th style="padding: 12px; text-align: right; background: #e2e8f0;">Y2 Budget</th>
+        </tr>
+      </thead>
+      <tbody id="area-table-body">
+         <tr><td colspan="4" style="text-align: center; padding: 20px;">Loading data...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script type="module" src="./scripts/investment_areas.js"></script>
+
   <script src="scripts/nav-active.js"></script>
 </body>
 </html>

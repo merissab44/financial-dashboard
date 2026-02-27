@@ -11,6 +11,57 @@
     <header class="main-header">
         <div id="global-nav"></div>
     </header>
-  <script src="scripts/nav-active.js"></script>
+    <!-- Grant Summary Page -->
+<div class="grants-dashboard" style="margin-top: 20px;">
+  
+  <!-- Top Summary Section -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    
+    <!-- KPI Card -->
+    <div style="background: #fff; padding: 15px 20px; border-radius: 8px; border-left: 5px solid #2563eb; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+        <p style="margin: 0; font-size: 0.85rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Total Committed Grants</p>
+        <h2 id="total-committed" style="margin: 5px 0 0 0; color: #0f172a; font-size: 1.8rem;">Loading...</h2>
+    </div>
+
+    <!-- Grantee Filter -->
+    <div>
+      <label for="grantee-filter" style="font-weight: 600; margin-right: 8px; color: #334155;">Filter by Grantee:</label>
+      <select id="grantee-filter" class="styled-dropdown">
+        <option value="All" selected>All Grantees</option>
+        <option value="Governance Team">Governance Team</option>
+        <option value="BCZ">Black Cultural Zone (BCZ)</option>
+        <option value="Roots">Roots Community Health</option>
+        <option value="EOYDC">EOYDC</option>
+        <option value="BOEN">Brotherhood of Elders (BOEN)</option>
+        <option value="OT">Oakland Thrives (OT)</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- Grants Table Container -->
+  <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+      <thead>
+        <tr style="border-bottom: 2px solid #cbd5e1; background: #f8fafc; color: #334155;">
+          <th style="padding: 12px;">Funder</th>
+          <th style="padding: 12px;">Grantee</th>
+          <th style="padding: 12px;">Restriction / Area</th>
+          <th style="padding: 12px; text-align: right;">Total Grant ($)</th>
+          <th style="padding: 12px; text-align: right;">FY 24-25</th>
+          <th style="padding: 12px; text-align: right;">FY 25-26</th>
+          <th style="padding: 12px; text-align: right;">FY 26-27</th>
+        </tr>
+      </thead>
+      <tbody id="grants-table-body">
+         <tr><td colspan="7" style="text-align: center; padding: 20px;">Loading grant data...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script type="module" src="./scripts/grants.js"></script>
+<script src="scripts/nav-active.js"></script>
 </body>
 </html>

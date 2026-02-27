@@ -1,51 +1,92 @@
-[
-  {
-    "id": "area-4",
-    "title": "4. Power-Building",
-    "total_budget_2023_2029": 10000000,
-    "y1_actuals": 1104818,
-    "y1_budget": 2007950,
-    "personnel_expenses": {
-      "total": 1200000,
-      "line_items": [
-        { "role": "Power Building Collaborative Group", "grantee": "BCZ", "amount": 500000, "description": "Core cultural power building, social enterprise" },
-        { "role": "Community & Empowerment Collaborative Group", "grantee": "BCZ", "amount": 300000, "description": "Community Stewards coordination" },
-        { "role": "Culture & Arts Collaborative Group", "grantee": "BCZ", "amount": 200000, "description": "Essential cultural programming" },
-        { "role": "Experience & Engagement Collaborative Group", "grantee": "BCZ", "amount": 125000, "description": "Basic policy advocacy" },
-        { "role": "Partnerships & Outreach Collaborative Group", "grantee": "BCZ", "amount": 75000, "description": "Community organizing" }
-      ]
-    },
-    "non_personnel_expenses": {
-      "total": 800000,
-      "line_items": [
-        { "category": "Cultural Programming", "grantee": "BCZ", "amount": 300000, "description": "Core events, arts programming" },
-        { "category": "Social Enterprise Development", "grantee": "BCZ", "amount": 200000, "description": "Basic business development" },
-        { "category": "Policy and Advocacy", "grantee": "BCZ", "amount": 150000, "description": "Quantum Blacklight Network support" },
-        { "category": "Bridge-Building Initiatives", "grantee": "BCZ", "amount": 100000, "description": "Cross-cultural programming" },
-        { "category": "Community Organizing", "grantee": "BCZ", "amount": 50000, "description": "Training, capacity building" }
-      ]
-    }
+{
+  "1": {
+    "name": "1. Backbone and Gen Ops",
+    "kpis": { "y2_revenue": 6545450, "y2_expenses": 6495750, "y2_gap": 49700 },
+    "details": [
+      { "category": "Oakland Thrives Backbone", "y1_budget": 2265000, "y1_actual": 2046051, "y2_budget": 2788022 },
+      { "category": "40x40 Backbone", "y1_budget": 840000, "y1_actual": 232938, "y2_budget": 1040300 },
+      { "category": "BCZ Gen Ops", "y1_budget": 1612500, "y1_actual": 1619556, "y2_budget": 1100000 },
+      { "category": "Roots Gen Ops", "y1_budget": 838650, "y1_actual": 774876, "y2_budget": 1062428 },
+      { "category": "EOYDC Gen Ops", "y1_budget": 200000, "y1_actual": 225000, "y2_budget": 200000 },
+      { "category": "BOEN Gen Ops", "y1_budget": 200000, "y1_actual": 200000, "y2_budget": 305000 }
+    ]
   },
-  {
-    "id": "area-8",
-    "title": "8. Family Health and Wellbeing",
-    "total_budget_2023_2029": 7000000,
-    "y1_actuals": 1198620,
-    "y1_budget": 2704919,
-    "personnel_expenses": {
-      "total": 1750000,
-      "line_items": [
-        { "role": "8.2 Food Oasis Collaborative Groups", "grantee": "BCZ", "amount": 950000, "description": "Basic organizational coordination, family programming, and Food Oasis coordination" },
-        { "role": "8.3 Young People's Wellness Center Staff", "grantee": "Roots", "amount": 800000, "description": "Senior Program Administrator, Family medicine doctor, Navigator Coordinator" }
-      ]
-    },
-    "non_personnel_expenses": {
-      "total": 5250000,
-      "line_items": [
-        { "category": "8.1 Pregnancy & Family Supports (Guaranteed Income)", "grantee": "Roots", "amount": 1500000, "description": "Guaranteed Income for 40x40 families and pregnant moms" },
-        { "category": "8.2 Food Oasis (AKOMA Market)", "grantee": "BCZ", "amount": 750000, "description": "Farmers Market Development, Community Programming, Food Oasis Infrastructure" },
-        { "category": "8.3 Young People's Wellness Center Buildout", "grantee": "Roots", "amount": 3000000, "description": "YPWC acquisition, build-out, operations, and participatory design" }
-      ]
-    }
+  "2": {
+    "name": "2. Live and Thrive",
+    "kpis": { "y2_revenue": 2500000, "y2_expenses": 2500000, "y2_gap": 0 },
+    "details": [
+      { "category": "Personnel (Commercial Real Estate & NCD)", "y1_budget": 490000, "y1_actual": 529883, "y2_budget": 750000 },
+      { "category": "Liberated Legacy Trust & Property Acquisition", "y1_budget": 13250000, "y1_actual": 11974059, "y2_budget": 1250000 },
+      { "category": "Strategic Capital Campaign / JPA", "y1_budget": 540000, "y1_actual": 110567, "y2_budget": 250000 },
+      { "category": "Comprehensive Residential Strategy", "y1_budget": 600000, "y1_actual": 110567, "y2_budget": 0 },
+      { "category": "Real Estate Career Pathways", "y1_budget": 0, "y1_actual": 0, "y2_budget": 250000 }
+    ]
+  },
+  "3": {
+    "name": "3. Community Data Trust & Fund",
+    "kpis": { "y2_revenue": 2273166, "y2_expenses": 2273166, "y2_gap": 0 },
+    "details": [
+      { "category": "Data Trust Personnel", "y1_budget": 394500, "y1_actual": 306782, "y2_budget": 591375 },
+      { "category": "Data Trust Non-Personnel (Systems & Tech)", "y1_budget": 1301740, "y1_actual": 602722, "y2_budget": 545000 },
+      { "category": "Community Fund Personnel", "y1_budget": 359170, "y1_actual": 279737, "y2_budget": 338858 },
+      { "category": "Community Fund Grants & Supports", "y1_budget": 2450000, "y1_actual": 1861000, "y2_budget": 797933 }
+    ]
+  },
+  "4": {
+    "name": "4. Power Building",
+    "kpis": { "y2_revenue": 3135200, "y2_expenses": 3135200, "y2_gap": 0 },
+    "details": [
+      { "category": "Cultural Power (Narrative Change)", "y1_budget": 357100, "y1_actual": 138053, "y2_budget": 962100 },
+      { "category": "Policy Power (Advocacy & Summit)", "y1_budget": 190000, "y1_actual": 144529, "y2_budget": 350000 },
+      { "category": "People Power (Community Stewards & Engagement)", "y1_budget": 1460850, "y1_actual": 805808, "y2_budget": 1823100 }
+    ]
+  },
+  "5": {
+    "name": "5. Learn & Grow",
+    "kpis": { "y2_revenue": 3500000, "y2_expenses": 3500000, "y2_gap": 0 },
+    "details": [
+      { "category": "Learn and Grow Stewardship / RBA", "y1_budget": 273000, "y1_actual": 46500, "y2_budget": 313000 },
+      { "category": "Youth-led Opportunity Exposure", "y1_budget": 0, "y1_actual": 0, "y2_budget": 370000 },
+      { "category": "Career Pathways (Internship Hub)", "y1_budget": 959600, "y1_actual": 808192, "y2_budget": 970000 },
+      { "category": "Career Pathways (Innovation Hub)", "y1_budget": 0, "y1_actual": 0, "y2_budget": 644500 },
+      { "category": "Black Educator & Parent Supports", "y1_budget": 150000, "y1_actual": 99600, "y2_budget": 412500 },
+      { "category": "Expand Affordable Early Childcare", "y1_budget": 0, "y1_actual": 0, "y2_budget": 790000 }
+    ]
+  },
+  "6": {
+    "name": "6. Safe & Connected",
+    "kpis": { "y2_revenue": 1444825, "y2_expenses": 1444825, "y2_gap": 0 },
+    "details": [
+      { "category": "Community-Based Mediation Personnel", "y1_budget": 410900, "y1_actual": 362483, "y2_budget": 656800 },
+      { "category": "Community-Based Mediation Non-Personnel", "y1_budget": 174000, "y1_actual": 73812, "y2_budget": 169500 },
+      { "category": "Behavioral Health & Safety Personnel", "y1_budget": 141800, "y1_actual": 117276, "y2_budget": 223525 },
+      { "category": "Behavioral Health & Safety Non-Personnel", "y1_budget": 45000, "y1_actual": 5000, "y2_budget": 45000 },
+      { "category": "Built/Natural Environment Personnel", "y1_budget": 175000, "y1_actual": 137395, "y2_budget": 200000 },
+      { "category": "Built/Natural Environment Non-Personnel", "y1_budget": 300000, "y1_actual": 145659, "y2_budget": 150000 }
+    ]
+  },
+  "7": {
+    "name": "7. Work & Wealth",
+    "kpis": { "y2_revenue": 1871207, "y2_expenses": 1871207, "y2_gap": 0 },
+    "details": [
+      { "category": "Personnel (Economic Programs & CHW)", "y1_budget": 1129905, "y1_actual": 700558, "y2_budget": 1362857 },
+      { "category": "THRIVE Center & Ecosystem Ops", "y1_budget": 100000, "y1_actual": 108686, "y2_budget": 200000 },
+      { "category": "Community Talent Agency / Co-op Economy", "y1_budget": 50000, "y1_actual": 54343, "y2_budget": 100000 },
+      { "category": "Community Stewards Pipeline", "y1_budget": 50000, "y1_actual": 54343, "y2_budget": 37500 },
+      { "category": "Wealth Generation / Financial Literacy", "y1_budget": 0, "y1_actual": 0, "y2_budget": 54166 },
+      { "category": "Community Health Worker Program", "y1_budget": 131633, "y1_actual": 65457, "y2_budget": 116684 }
+    ]
+  },
+  "8": {
+    "name": "8. Family Health and Wellbeing",
+    "kpis": { "y2_revenue": 1318228, "y2_expenses": 1318228, "y2_gap": 0 },
+    "details": [
+      { "category": "Pregnancy & Family Supports Personnel", "y1_budget": 0, "y1_actual": 59878, "y2_budget": 79836 },
+      { "category": "Pregnancy & Family Supports Grants", "y1_budget": 500000, "y1_actual": 514864, "y2_budget": 127817 },
+      { "category": "Food Oasis Personnel", "y1_budget": 200000, "y1_actual": 58070, "y2_budget": 580000 },
+      { "category": "Food Oasis Market Dev & Programming", "y1_budget": 250000, "y1_actual": 131238, "y2_budget": 330575 },
+      { "category": "Young People's Wellness Center Personnel", "y1_budget": 0, "y1_actual": 117005, "y2_budget": 200000 },
+      { "category": "Young People's Wellness Center Build-out", "y1_budget": 1754919, "y1_actual": 296742, "y2_budget": 0 }
+    ]
   }
-]
+}
