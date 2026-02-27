@@ -24,13 +24,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
   // PART 1: POPULATE KPI CARDS (Financial Statements)
   // ==========================================
-  fetch('./data/financial_statements.json')
+  fetch('./data/financial_statements.json?v=' + new Date().getTime())
     .then(response => response.json())
     .then(data => {
-      const assets = data.statement_of_financial_position.assets;
-      const liabilities = data.statement_of_financial_position.liabilities;
-      const netAssets = data.statement_of_financial_position.net_assets;
-      const expenses = data.statement_of_activities.expenses_by_function;
+      
+      // NEW: Target the 2024 data specifically due to the multi-year JSON structure
+      const currentYearData = data["2024"];
+
+      if (!currentYearData) {
+          console.error("2024 data not found in JSON.");
+          return;
+      }
+
+      const assets = currentYearData.statement_of_financial_position.assets;
+      const liabilities = currentYearData.statement_of_financial_position.liabilities;
+      const netAssets = currentYearData.statement_of_financial_position.net_assets;
+      const expenses = currentYearData.statement_of_activities.expenses_by_function;
 
       const currentRatio = calculateCurrentRatio(assets, liabilities);
       const debtRatio = calculateDebtRatio(assets, liabilities);
@@ -45,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
       updateEl('operating-reserve', operatingReserve);
     })
     .catch(error => console.error("Error loading financial statements:", error));
-
   // ==========================================
   // PART 2: POPULATE GRAPHS (Budget & Summaries)
   // ==========================================

@@ -19,13 +19,21 @@
 
     <div class="financials-dashboard" style="margin-top: 20px;">
   
-  <!-- Tabs Navigation -->
-  <div class="actions" style="display: flex; gap: 10px; margin-bottom: 20px;">
-    <!-- Active by default -->
-    <button class="btn active" data-view="soa">Statement of Activities</button>
-    <button class="btn secondary" data-view="sfp">Financial Position</button>
-    <button class="btn secondary" data-view="sfe">Functional Expenses</button>
-    <button class="btn secondary" data-view="variances">Budget Variances</button>
+    <!-- Tabs Navigation -->
+    <div class="actions" style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <!-- Active by default -->
+        <button class="btn active" data-view="soa">Statement of Activities</button>
+        <button class="btn secondary" data-view="sfp">Financial Position</button>
+        <button class="btn secondary" data-view="sfe">Functional Expenses</button>
+        <button class="btn secondary" data-view="variances">Budget Variances</button>
+    </div>
+    <div>
+      <label for="year-filter" style="font-weight: 600; margin-right: 8px; color: #334155;">Select Fiscal Year:</label>
+      <select id="year-filter" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem;">
+        <option value="2024" selected>2024</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+      </select>
     </div>
 
     <!-- Content Container (Tables will be injected here) -->

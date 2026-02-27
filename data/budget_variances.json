@@ -1,0 +1,10 @@
+[
+  { "category": "1. Backbone and Gen Ops", "budget": 5956150, "actual": 5098421 },
+  { "category": "2. Live and Thrive", "budget": 14880000, "actual": 12807688 },
+  { "category": "3. Data Trust and Fund", "budget": 4505410, "actual": 3050241 },
+  { "category": "4. Power Building", "budget": 2007950, "actual": 1104818 },
+  { "category": "5. Learn and Grow", "budget": 1382600, "actual": 954292 },
+  { "category": "6. Safe and Connected", "budget": 1246700, "actual": 872761 },
+  { "category": "7. Work and Wealth", "budget": 1461538, "actual": 1057081 },
+  { "category": "8. Family Health and Wellbeing", "budget": 2704919, "actual": 1198620 }
+]
