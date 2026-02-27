@@ -1,0 +1,44 @@
+{
+  "fiscal_year": "2024",
+  "statement_of_financial_position": {
+    "assets": [
+      { "line_item": "1000 Cash & Cash Equivalents", "BCZ": 4686669, "Roots": 1202842, "EOYDC": 680407, "BOEN": 853141 },
+      { "line_item": "1100 Grants & Contracts Receivable", "BCZ": 3629438, "Roots": 11578852, "EOYDC": 1734238, "BOEN": 0 },
+      { "line_item": "1500 Investments & Joint Ventures", "BCZ": 981470, "Roots": 2235556, "EOYDC": 0, "BOEN": 0 },
+      { "line_item": "1700 Property, Equipment & Improvements (Net)", "BCZ": 551484, "Roots": 8755977, "EOYDC": 356584, "BOEN": 0 },
+      { "line_item": "1800 Right-of-Use & Other Assets", "BCZ": 27344, "Roots": 4805123, "EOYDC": 11640, "BOEN": 0 }
+    ],
+    "liabilities": [
+      { "line_item": "2000 Accounts Payable & Accrued Expenses", "BCZ": 1619445, "Roots": 2002213, "EOYDC": 346297, "BOEN": 314 },
+      { "line_item": "2100 Accrued Payroll", "BCZ": 205907, "Roots": 1478409, "EOYDC": 0, "BOEN": 0 },
+      { "line_item": "2300 Deferred / Unearned Revenue", "BCZ": 180, "Roots": 0, "EOYDC": 75897, "BOEN": 0 },
+      { "line_item": "2500 Operating Lease Liabilities", "BCZ": 17605, "Roots": 4174588, "EOYDC": 11640, "BOEN": 0 },
+      { "line_item": "2800 Long-Term Debt & Mortgages", "BCZ": 25000, "Roots": 3360787, "EOYDC": 187500, "BOEN": 0 }
+    ],
+    "net_assets": [
+      { "line_item": "3100 Net Assets Without Donor Restrictions", "BCZ": 3941596, "Roots": 16672053, "EOYDC": 1761535, "BOEN": 852827 },
+      { "line_item": "3200 Net Assets With Donor Restrictions", "BCZ": 4066672, "Roots": 1251853, "EOYDC": 400000, "BOEN": 0 }
+    ]
+  },
+  "statement_of_activities": {
+    "revenue": [
+      { "line_item": "4100 Government Grants & Contracts", "BCZ": 1902873, "Roots": 21806639, "EOYDC": 4212188, "BOEN": 2475200 },
+      { "line_item": "4300 Contributions & Donations", "BCZ": 8032452, "Roots": 178488, "EOYDC": 253270, "BOEN": 85095 },
+      { "line_item": "4400 Earned Income & Patient Revenue", "BCZ": 0, "Roots": 2725108, "EOYDC": 0, "BOEN": 409169 },
+      { "line_item": "4800 Investment Return & Other Income", "BCZ": 101303, "Roots": 3577077, "EOYDC": 476212, "BOEN": 9784 }
+    ],
+    "expenses_by_function": [
+      { "line_item": "Total Program Services", "BCZ": 4212784, "Roots": 23228864, "EOYDC": 3970304, "BOEN": 1476604 },
+      { "line_item": "Total Management & General", "BCZ": 990534, "Roots": 4484895, "EOYDC": 447941, "BOEN": 304541 },
+      { "line_item": "Total Fundraising", "BCZ": 82672, "Roots": 23622, "EOYDC": 258163, "BOEN": 0 }
+    ]
+  },
+  "statement_of_functional_expenses": [
+    { "line_item": "5000 Salaries, Taxes & Benefits", "BCZ": 2650199, "Roots": 17379556, "EOYDC": 2472750, "BOEN": 251472 },
+    { "line_item": "6100 Professional Fees & Consultants", "BCZ": 612649, "Roots": 2252136, "EOYDC": 652068, "BOEN": 1395813 },
+    { "line_item": "7200 Grants Given & Participant Support", "BCZ": 739500, "Roots": 0, "EOYDC": 999939, "BOEN": 69951 },
+    { "line_item": "8100 Rent, Occupancy & Utilities", "BCZ": 49179, "Roots": 1814520, "EOYDC": 139274, "BOEN": 11004 },
+    { "line_item": "8800 Depreciation & Amortization", "BCZ": 73781, "Roots": 692441, "EOYDC": 38852, "BOEN": 0 },
+    { "line_item": "8900 Other Operating Expenses", "BCZ": 1160682, "Roots": 5598728, "EOYDC": 373525, "BOEN": 53305 }
+  ]
+}

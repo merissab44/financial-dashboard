@@ -1,0 +1,51 @@
+[
+  {
+    "id": "area-4",
+    "title": "4. Power-Building",
+    "total_budget_2023_2029": 10000000,
+    "y1_actuals": 1104818,
+    "y1_budget": 2007950,
+    "personnel_expenses": {
+      "total": 1200000,
+      "line_items": [
+        { "role": "Power Building Collaborative Group", "grantee": "BCZ", "amount": 500000, "description": "Core cultural power building, social enterprise" },
+        { "role": "Community & Empowerment Collaborative Group", "grantee": "BCZ", "amount": 300000, "description": "Community Stewards coordination" },
+        { "role": "Culture & Arts Collaborative Group", "grantee": "BCZ", "amount": 200000, "description": "Essential cultural programming" },
+        { "role": "Experience & Engagement Collaborative Group", "grantee": "BCZ", "amount": 125000, "description": "Basic policy advocacy" },
+        { "role": "Partnerships & Outreach Collaborative Group", "grantee": "BCZ", "amount": 75000, "description": "Community organizing" }
+      ]
+    },
+    "non_personnel_expenses": {
+      "total": 800000,
+      "line_items": [
+        { "category": "Cultural Programming", "grantee": "BCZ", "amount": 300000, "description": "Core events, arts programming" },
+        { "category": "Social Enterprise Development", "grantee": "BCZ", "amount": 200000, "description": "Basic business development" },
+        { "category": "Policy and Advocacy", "grantee": "BCZ", "amount": 150000, "description": "Quantum Blacklight Network support" },
+        { "category": "Bridge-Building Initiatives", "grantee": "BCZ", "amount": 100000, "description": "Cross-cultural programming" },
+        { "category": "Community Organizing", "grantee": "BCZ", "amount": 50000, "description": "Training, capacity building" }
+      ]
+    }
+  },
+  {
+    "id": "area-8",
+    "title": "8. Family Health and Wellbeing",
+    "total_budget_2023_2029": 7000000,
+    "y1_actuals": 1198620,
+    "y1_budget": 2704919,
+    "personnel_expenses": {
+      "total": 1750000,
+      "line_items": [
+        { "role": "8.2 Food Oasis Collaborative Groups", "grantee": "BCZ", "amount": 950000, "description": "Basic organizational coordination, family programming, and Food Oasis coordination" },
+        { "role": "8.3 Young People's Wellness Center Staff", "grantee": "Roots", "amount": 800000, "description": "Senior Program Administrator, Family medicine doctor, Navigator Coordinator" }
+      ]
+    },
+    "non_personnel_expenses": {
+      "total": 5250000,
+      "line_items": [
+        { "category": "8.1 Pregnancy & Family Supports (Guaranteed Income)", "grantee": "Roots", "amount": 1500000, "description": "Guaranteed Income for 40x40 families and pregnant moms" },
+        { "category": "8.2 Food Oasis (AKOMA Market)", "grantee": "BCZ", "amount": 750000, "description": "Farmers Market Development, Community Programming, Food Oasis Infrastructure" },
+        { "category": "8.3 Young People's Wellness Center Buildout", "grantee": "Roots", "amount": 3000000, "description": "YPWC acquisition, build-out, operations, and participatory design" }
+      ]
+    }
+  }
+]

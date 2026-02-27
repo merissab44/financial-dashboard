@@ -1,0 +1,27 @@
+{
+  "overall_metrics": {
+    "total_projected_revenue": 100019000,
+    "total_projected_expenses": 100000000,
+    "y1_budget_revenue": 34232579,
+    "y1_actuals_revenue": 35532579,
+    "y1_budget_expenses": 34145267,
+    "y1_actuals_expenses": 26143922
+  },
+  "allocations_by_area": [
+    { "id": "1", "name": "Backbone and Gen Ops", "budget": 22000000 },
+    { "id": "2", "name": "Live and Thrive", "budget": 26000000 },
+    { "id": "3", "name": "Data Trust and Fund", "budget": 14500000 },
+    { "id": "4", "name": "Power Building", "budget": 10000000 },
+    { "id": "5", "name": "Learn and Grow", "budget": 9500000 },
+    { "id": "6", "name": "Safe and Connected", "budget": 8000000 },
+    { "id": "7", "name": "Work and Wealth", "budget": 3000000 },
+    { "id": "8", "name": "Family Health and Wellbeing", "budget": 7000000 }
+  ],
+  "allocations_by_grantee": [
+    { "name": "Black Cultural Zone (BCZ)", "budget": 42150000 },
+    { "name": "Roots Community Health", "budget": 29600000 },
+    { "name": "Oakland Thrives (OT)", "budget": 13500000 },
+    { "name": "East Oakland Youth Development Center (EOYDC)", "budget": 9500000 },
+    { "name": "Brotherhood of Elders Network (BOEN)", "budget": 4750000 }
+  ]
+}
