@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     </li>
                 `).join('')}
             </ul>
-            <button class="logout-btn" style="background:#000; color:#fff; border:none; padding:8px 20px; border-radius:20px; cursor:pointer;">Logout</button>
         </nav>
     `;
 

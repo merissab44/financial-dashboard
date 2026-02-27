@@ -127,3 +127,75 @@ select, input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
     height: 450px;
     margin-top: 30px;
 }
+
+.kpi-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); 
+  gap: 12px;
+  margin-bottom: 15px; 
+}
+
+.kpi-card {
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08); /* Lighter shadow */
+  text-align: center;
+  margin-top: 10px;
+}
+
+ .kpi-card canvas {
+  display: block;
+  margin: 0 auto;
+ }
+
+.kpi-card h3 {
+  font-size: 0.8rem; 
+  margin: 0 0 5px 0;
+  color: #64748b;
+}
+
+.kpi-value {
+  font-size: 1.2rem; /* Scaled down number */
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
+}
+
+.kpi-target {
+  font-size: 0.7rem; /* Tiny target text */
+  color: #94a3b8;
+  display: block;
+  margin-top: 4px;
+}
+
+/* 3. Adjust the Graphs Grid */
+.dashboard-graphs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.5fr; /* Puts all 3 charts in a single row */
+  gap: 12px;
+}
+
+.chart-card {
+  background: #fff;
+  padding: 10px; /* Reduced padding */
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.chart-card h3 {
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0 0 10px 0;
+  color: #333;
+}
+.chart-container {
+  position: relative; 
+  height: 400px; 
+  width: 100%;
+}
+
+#areaDonutChart {
+  display: block;
+  margin: 0 auto;
+ }

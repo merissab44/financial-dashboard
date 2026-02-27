@@ -15,83 +15,27 @@
     <section class="hero">
         <h1>Consolidated Financial Statements</h1>
         <p>Comprehensive four-way view of activities, position, functional expenses, and budget variances.</p>
-        
-        <div class="actions">
-            <button id="btn-soa" class="btn active" data-view="soa">Statement of Activities</button>
-            <button id="btn-sofp" class="btn secondary" data-view="sofp">Financial Position</button>
-            <button id="btn-functional" class="btn secondary" data-view="functional">Functional Expenses</button>
-            <button id="btn-variances" class="btn secondary" data-view="variances">Variances</button>
-        </div>
     </section>
 
-    <main class="container">
-        <!-- Dynamic Injection Point -->
-        <section id="dashboard-content" class="dashboard-content">
-            <div id="loading-state" class="table-wrap">
-                <table>
-                    <tbody>
-                        <tr><td colspan="4" style="text-align:center; padding: 40px;">Loading Financial Data...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+    <div class="financials-dashboard" style="margin-top: 20px;">
+  
+  <!-- Tabs Navigation -->
+  <div class="actions" style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <!-- Active by default -->
+    <button class="btn active" data-view="soa">Statement of Activities</button>
+    <button class="btn secondary" data-view="sfp">Financial Position</button>
+    <button class="btn secondary" data-view="sfe">Functional Expenses</button>
+    <button class="btn secondary" data-view="variances">Budget Variances</button>
+    </div>
 
-        <div class="table-wrap">
-        <table>
-            <thead>
-                <tr><th>Description</th><th class="num">Current Year</th><th class="num">Prior Year</th></tr>
-            </thead>
-            <tbody id="soa-body">
-                <!-- Rows for Support/Revenue, Grants, Expenses, and Change in Net Assets -->
-            </tbody>
-        </table>
-        </div>
-        <!-- View 2: Statement of Financial Position (SoFP)
-        The balance sheet snapshot. -->
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr><th>Account Category</th><th class="num">Balance</th><th class="num">% of Total</th></tr>
-                </thead>
-                <tbody id="sofp-body">
-                    <!-- Rows for Assets, Liabilities, and Net Assets -->
-                </tbody>
-            </table>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr><th>Account Category</th><th class="num">Balance</th><th class="num">% of Total</th></tr>
-                </thead>
-                <tbody id="sofp-body">
-                    <!-- Rows for Assets, Liabilities, and Net Assets -->
-                </tbody>
-            </table>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr><th>Strategic Dimension</th><th>Statement</th><th class="num">Amount</th><th class="num">% of Total</th></tr>
-                </thead>
-                <tbody id="functional-body">
-                    <!-- Programmatic rows for FN-01 through FN-08 -->
-                </tbody>
-            </table>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr><th>Category</th><th class="num">Budget</th><th class="num">Actual</th><th class="num">Variance ($)</th><th class="num">Variance (%)</th></tr>
-                </thead>
-                <tbody id="variances-body">
-                    <!-- Calculation: Actual - Budget -->
-                </tbody>
-            </table>
-        </div>
+    <!-- Content Container (Tables will be injected here) -->
+    <div id="financials-content" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-x: auto;">
+        <p style="text-align: center; color: #64748b;">Loading financial data...</p>
+    </div>
 
-    </main>
+  </div>
 
     <script src="scripts/nav-active.js"></script>
-    <script src="scripts/financials.js"></script>
+    <script type="module" src="scripts/financials.js"></script>
 </body>
 </html>

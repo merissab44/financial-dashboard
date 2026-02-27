@@ -13,61 +13,83 @@
     <header class="main-header">
         <div id="global-nav"></div>
     </header>
-    <!-- Filters Section -->
-    <section class="filter-section">
-        <div class="filter-container">
-            <div class="filter-group">
-                <label for="orgSelect">Organization</label>
-                <select id="orgSelect"><option value="All">All</option></select>
-            </div>
-            <div class="filter-group">
-                <label for="ratioSelect">Ratio</label>
-                <select id="ratioSelect"></select>
-            </div>
-            <div class="filter-group">
-                <label for="chartTypeSelect">Chart Type</label>
-                <select id="chartTypeSelect">
-                    <option>Multi-Line (Trends Over Time)</option>
-                    <option>Grouped Bar (Compare Orgs)</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label>Year Range</label>
-                <div class="year-inputs">
-                    <input type="number" id="yearMin" placeholder="Min">
-                    <span>to</span>
-                    <input type="number" id="yearMax" placeholder="Max">
-                </div>
-            </div>
-            <button id="applyBtn" class="btn-primary">Apply Filters</button>
-        </div>
-    </section>
 
-    <!-- Task 2: 11-Ratio Performance Grid -->
-    <section class="dashboard-content">
-        <div class="ratio-grid">
-            <!-- 11 Cards for the Ratios identified in Slide 1 -->
-            <div class="metric-card"><div class="metric-title">Current Ratio</div><div id="val-current-ratio" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">Quick Ratio</div><div id="val-quick-ratio" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">Operating Reserve</div><div id="val-operating-reserve-ratio" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">A/R Aging >90</div><div id="val-ar-aging-90-days" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">A/P Aging >90</div><div id="val-ap-aging-90-days" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">Debt Ratio</div><div id="val-debt-ratio" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">Program Exp %</div><div id="val-program-expense-ratio" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">Admin Exp %</div><div id="val-admin-expense-ratio" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">Fundraising Eff</div><div id="val-fundraising-efficiency" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">Rev Diversity</div><div id="val-revenue-diversity-ratio" class="metric-value">—</div></div>
-            <div class="metric-card"><div class="metric-title">HHI (Est.)</div><div id="val-hhi-est" class="metric-value">—</div></div>
-        </div>
+<div id="dashboard-content">
 
-        <!-- Main Analytics Chart -->
-        <div class="chart-container">
-            <canvas id="ratioChart"></canvas>
-        </div>
-    </section>
+  <!-- ========================================== -->
+  <!-- TOP SECTION: KPI CARDS (Liquidity & Efficiency) -->
+  <!-- ========================================== -->
+  <div class="kpi-dashboard-grid">
+    
+    <!-- Liquidity & Debt -->
+    <div class="kpi-card">
+      <h3>Current Ratio</h3>
+      <p id="current-ratio" class="kpi-value">Loading...</p>
+      <span class="kpi-target">Target: > 1.0</span>
+    </div>
+
+    <div class="kpi-card">
+      <h3>Debt Ratio</h3>
+      <p id="debt-ratio" class="kpi-value">Loading...</p>
+      <span class="kpi-target">Target: < 40%</span>
+    </div>
+
+    <div class="kpi-card">
+      <h3>Operating Reserve</h3>
+      <p id="operating-reserve" class="kpi-value">Loading...</p>
+      <span class="kpi-target">Target: > 3 Months</span>
+    </div>
+
+    <!-- Functional Expenses -->
+    <div class="kpi-card">
+      <h3>Program Expense Ratio</h3>
+      <p id="program-ratio" class="kpi-value">Loading...</p>
+      <span class="kpi-target">Target: > 75%</span>
+    </div>
+
+    <div class="kpi-card">
+      <h3>Admin Expense Ratio</h3>
+      <p id="admin-ratio" class="kpi-value">Loading...</p>
+      <span class="kpi-target">Target: < 15%</span>
+    </div>
+
+    <div class="kpi-card">
+      <h3>Fundraising Efficiency</h3>
+      <p id="fund-ratio" class="kpi-value">Loading...</p>
+      <span class="kpi-target">Target: < 10%</span>
+    </div>
+
+  </div> <!-- End KPI Grid -->
+<div class="dashboard-graphs-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+  
+  <!-- Graph 1: Investment Areas -->
+  <div class="chart-card">
+    <h3>Budget by Investment Area</h3>
+    <div class="chart-container">
+        <canvas id="areaDonutChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Graph 2: Grantee Allocations -->
+  <div class="chart-card">
+    <h3>Budget by Grantee</h3>
+    <div class="chart-container">
+        <canvas id="granteeBarChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Graph 3: Budget vs Actuals -->
+  <div class="chart-card" style="grid-column: 1 / -1; justify-self: center; width: 100%; max-width: 900px;">
+    <h3>Year 1: Budget vs Actuals</h3>
+    <div class="chart-container">
+        <canvas id="budgetActualChart"></canvas>
+    </div>
+  </div>
+
+</div>
 
     <!-- External Logic -->
-    <script src="scripts/graphs.js"></script>
+    <script type="module" src="scripts/graphs.js"></script>
     <script src="scripts/nav-active.js"></script>
 </body>
 </html>

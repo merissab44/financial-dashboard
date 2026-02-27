@@ -1,100 +1,137 @@
-const CSV_PATH = "data/Rise_East_Budget_Cleaned.csv";
+// 1. Import your existing math logic
+import { calculateConsolidatedTotal } from '../utils/calculations.js';
 
-const DIMENSIONS = [
-    { id: "1.", label: "Backbone & Gen Ops", dotClass: "dot-fn01", statement: "Admin, indirect, management fees", csvLabels: ["1. Backbone and Gen Ops", "Backbone and Gen Ops", "Backbone & Gen Ops"] },
-    { id: "2.", label: "Live & Thrive", dotClass: "dot-fn02", statement: "Buildings, capital improvements", csvLabels: ["2. Live and Thrive", "Live and Thrive", "Live & Thrive"] },
-    { id: "3.", label: "Data Trust & Fund", dotClass: "dot-fn03", statement: "Evaluation, research, data", csvLabels: ["3. Data Trust and Fund", "Data Trust and Fund", "Data Trust & Fund"] },
-    { id: "4.", label: "Power Building", dotClass: "dot-fn04", statement: "Civic engagement, organizing", csvLabels: ["4. Power Building", "Power Building"] },
-    { id: "5.", label: "Learn & Grow", dotClass: "dot-fn05", statement: "Youth programs, scholarships", csvLabels: ["5. Learn and Grow", "Learn and Grow", "Learn & Grow"] },
-    { id: "6.", label: "Safe & Connected", dotClass: "dot-fn06", statement: "Safety, ambassadors, community response", csvLabels: ["6. Safe and Connected", "Safe and Connected", "Safe & Connected"] },
-    { id: "7.", label: "Work and Wealth", dotClass: "dot-fn07", statement: "Economic development", csvLabels: ["7. Work and Wealth", "Work and Wealth"] },
-    { id: "8.", label: "Family Health and Wellbeing", dotClass: "dot-fn08", statement: "Clinical services, supplies, labs", csvLabels: ["8. Family Health and Wellbeing", "Family Health and Wellbeing"] }
-];
-
-const KPI_LABELS = {
-    revenue: ["Total Revenue", "Total Support and Revenue", "Total support and revenue"],
-    expenses: ["Total Expenses", "Total Expense", "Expenses Total"]
-};
-
-// Robust Parser from Source Context
-function parseNumber(v) {
-    const raw = String(v ?? "").trim();
-    if (!raw || raw === "-" || raw === "—") return null;
-    const neg = /^\(.*\)$/.test(raw);
-    const cleaned = raw.replace(/^\(|\)$/g, "").replace(/\$/g, "").replace(/,/g, "").trim();
-    const x = Number(cleaned);
-    return Number.isFinite(x) ? (neg ? -x : x) : null;
-}
-
-function formatCurrency(v) {
-    if (!Number.isFinite(v)) return "—";
-    return (v < 0 ? "-$" : "$") + Math.abs(v).toLocaleString(undefined, { maximumFractionDigits: 0 });
-}
-
-function formatPct(v) {
-    if (!Number.isFinite(v)) return "—";
-    return `${(v * 100).toFixed(1)}%`;
-}
-
-function switchView(viewName) {
-    const container = document.getElementById('dashboard-content');
-    const buttons = document.querySelectorAll('.actions .btn');
-    
-    buttons.forEach(btn => {
-        btn.classList.remove('active');
-        btn.classList.add('secondary');
-        if (btn.dataset.view === viewName) {
-            btn.classList.add('active');
-            btn.classList.remove('secondary');
-        }
-    });
-
-    renderView(viewName);
-}
-
-function renderView(viewName) {
-    const container = document.getElementById('dashboard-content');
-    
-    if (viewName === 'functional') {
-        let html = `<div class="table-wrap"><table><thead><tr><th>Dimension</th><th>Statement</th><th class="num">Amount</th><th class="num">% of Total</th></tr></thead><tbody>`;
-        
-        DIMENSIONS.forEach(d => {
-            // In a real implementation, 'val' would be fetched from the lineMap using d.csvLabels
-            const val = 125000; // Placeholder for logic
-            html += `<tr>
-                <td><span class="dot ${d.dotClass}"></span>${d.label}</td>
-                <td>${d.statement}</td>
-                <td class="num">${formatCurrency(val)}</td>
-                <td class="num">${formatPct(0.12)}</td>
-            </tr>`;
-        });
-        
-        html += `</tbody></table></div>`;
-        container.innerHTML = html;
-    } else if (viewName === 'variances') {
-        const budget = 500000;
-        const actual = 485000;
-        const variance = actual - budget;
-        const varPct = variance / budget;
-        
-        container.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Account</th><th class="num">Budget</th><th class="num">Actual</th><th class="num">Var ($)</th><th class="num">Var (%)</th></tr></thead>
-        <tbody><tr>
-            <td>Total Operations</td>
-            <td class="num">${formatCurrency(budget)}</td>
-            <td class="num">${formatCurrency(actual)}</td>
-            <td class="num" style="color:${variance < 0 ? 'var(--deficit-red)' : 'var(--success-green)'}">${formatCurrency(variance)}</td>
-            <td class="num">${formatPct(varPct)}</td>
-        </tr></tbody></table></div>`;
-    }
-    // Additional view logic for SoA and SoFP follows same pattern...
-}
+// Global variable to store the JSON data so we don't fetch it every time a tab is clicked
+let financialData = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const buttons = document.querySelectorAll('.actions .btn');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => switchView(btn.dataset.view));
+  // 1. Initialize Tab Buttons
+  const buttons = document.querySelectorAll('.actions .btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // FIX: Use closest() to ensure we get the button even if the user clicks inner text
+      const targetBtn = e.target.closest('.btn');
+      if (!targetBtn) return;
+      
+      const view = targetBtn.dataset.view;
+      switchView(view);
     });
-    
-    // Default View
-    switchView('soa');
+  });
+
+  // 2. Fetch the JSON Data
+  fetch('./data/financial_statements.json')
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to load financial JSON");
+      return response.json();
+    })
+    .then(data => {
+      financialData = data;
+      // Render the default view (Statement of Activities) once data loads
+      switchView('soa'); 
+    })
+    .catch(error => {
+      console.error("Financials Error:", error);
+      document.getElementById('financials-content').innerHTML = `<p style="color:red; text-align:center;">Error loading financial data. Please ensure financial_statements.json is in the /data folder.</p>`;
+    });
 });
+
+// --- Tab Switching Logic ---
+function switchView(viewName) {
+  const container = document.getElementById('financials-content');
+  if (!container || !financialData) return;
+
+  // Update button active/secondary classes
+  const buttons = document.querySelectorAll('.actions .btn');
+  buttons.forEach(btn => {
+    btn.classList.remove('active');
+    btn.classList.add('secondary');
+    if (btn.dataset.view === viewName) {
+      btn.classList.add('active');
+      btn.classList.remove('secondary');
+    }
+  });
+
+  // Inject the correct table based on the tab clicked
+  if (viewName === 'soa') {
+    container.innerHTML = renderStatementOfActivities(financialData.statement_of_activities);
+  } else if (viewName === 'sfp') {
+    container.innerHTML = renderFinancialPosition(financialData.statement_of_financial_position);
+  } else if (viewName === 'sfe') {
+    container.innerHTML = renderFunctionalExpenses(financialData.statement_of_functional_expenses);
+  } else if (viewName === 'variances') {
+    container.innerHTML = `<h3 style="margin-top:0;">Budget Variances</h3><p>Variance matrix is currently under construction. Please refer to the Performance Dashboard for high-level variance charts.</p>`;
+  }
+}
+
+// --- Table Rendering Functions ---
+
+// Helper to format numbers into currency strings
+function formatCurrency(value) {
+  if (!Number.isFinite(value) || value === 0) return "—";
+  return (value < 0 ? "-$" : "$") + Math.abs(value).toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+
+// Generates the table headers (The 4 Grantees + Consolidated)
+function getTableHeader() {
+  return `
+    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+      <thead>
+        <tr style="border-bottom: 2px solid #cbd5e1; background: #f8fafc;">
+          <th style="padding: 12px; width: 35%;">Account Category</th>
+          <th style="padding: 12px; text-align: right;">BCZ</th>
+          <th style="padding: 12px; text-align: right;">Roots</th>
+          <th style="padding: 12px; text-align: right;">EOYDC</th>
+          <th style="padding: 12px; text-align: right;">BOEN</th>
+          <th style="padding: 12px; text-align: right; background: #e2e8f0; color: #0f172a;">Consolidated Total</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+}
+
+// Loops through an array of financial line items and builds table rows
+function renderTableSection(sectionTitle, rows) {
+  let html = `<tr><td colspan="6" style="font-weight: 700; color: #334155; padding: 12px 10px 8px 10px; border-bottom: 1px solid #e2e8f0;">${sectionTitle}</td></tr>`;
+  
+  rows.forEach(row => {
+    const total = calculateConsolidatedTotal(row);
+    html += `
+      <tr style="border-bottom: 1px solid #f1f5f9;">
+        <td style="padding: 10px 10px 10px 20px; color: #475569;">${row.line_item}</td>
+        <td style="padding: 10px; text-align: right;">${formatCurrency(row.BCZ)}</td>
+        <td style="padding: 10px; text-align: right;">${formatCurrency(row.Roots)}</td>
+        <td style="padding: 10px; text-align: right;">${formatCurrency(row.EOYDC)}</td>
+        <td style="padding: 10px; text-align: right;">${formatCurrency(row.BOEN)}</td>
+        <td style="padding: 10px; text-align: right; font-weight: 600; background: #f8fafc;">${formatCurrency(total)}</td>
+      </tr>
+    `;
+  });
+  return html;
+}
+
+// 1. Build Statement of Activities
+function renderStatementOfActivities(soaData) {
+  let html = `<h3 style="margin-top: 0; color: #0f172a;">Statement of Activities</h3>` + getTableHeader();
+  html += renderTableSection("Revenue", soaData.revenue);
+  html += renderTableSection("Expenses by Function", soaData.expenses_by_function);
+  html += `</tbody></table>`;
+  return html;
+}
+
+// 2. Build Statement of Financial Position
+function renderFinancialPosition(sfpData) {
+  let html = `<h3 style="margin-top: 0; color: #0f172a;">Statement of Financial Position</h3>` + getTableHeader();
+  html += renderTableSection("Assets", sfpData.assets);
+  html += renderTableSection("Liabilities", sfpData.liabilities);
+  html += renderTableSection("Net Assets", sfpData.net_assets);
+  html += `</tbody></table>`;
+  return html;
+}
+
+// 3. Build Statement of Functional Expenses
+function renderFunctionalExpenses(sfeData) {
+  let html = `<h3 style="margin-top: 0; color: #0f172a;">Statement of Functional Expenses</h3>` + getTableHeader();
+  html += renderTableSection("Functional Expenses", sfeData);
+  html += `</tbody></table>`;
+  return html;
+}
