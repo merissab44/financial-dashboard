@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rise East | Financial Performance Dashboard</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles/performance.css">
+    <!-- Chart.js Dependency (Must load before graphs.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div id="global-nav"></div>
+    </header>
+
+  <!-- <div class="performance-controls" style="margin-bottom: 20px; display: flex; gap: 15px;">
+    
+    <!Primary View Toggle -->
+    <!-- <select id="view-level-filter" class="styled-dropdown">
+        <option value="macro">$1 Billion Consortium Level</option>
+        <option value="org">Organization Level</option>
+    </select>
+
+    < Secondary Org Toggle (Hidden by default) -->
+    <!-- <select id="org-filter" class="styled-dropdown" style="display: none;">
+        <option value="BCZ">Black Cultural Zone (BCZ)</option>
+        <option value="Roots">Roots Community Health</option>
+        <option value="EOYDC">East Oakland Youth Development (EOYDC)</option>
+        <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
+    </select> -->
+
+<!-- </div> --> 
+
+<!-- Add dashboard wrapper -->
+<div class="dashboard-wrapper">
+
+<!-- Tab 2: Dashboard (Performance & Ratios) -->
+<!-- <div id="tab-dashboard" class="tab-content">
+    
+    <h2 id="dashboard-title" style="font-size: 1.8rem; margin-bottom: 5px; text-align: center;">$1 Billion Consortium Dashboard</h2>
+    <div class="filter-container" style="margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label for="perf-org-filter" style="font-weight: 600; margin-right: 10px;">Filter Dashboard by Entity:</label>
+        <select id="perf-org-filter" onchange="updatePerformanceDials()" style="padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; min-width: 300px;">
+            <option value="ALL">Consolidated Consortium Total</option>
+            <option value="BCZ">Black Cultural Zone (BCZ)</option>
+            <option value="Roots">Roots Community Health Center</option>
+            <option value="EOYDC">East Oakland Youth Development Center (EOYDC)</option>
+            <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
+        </select>
+    </div> -->
+
+    <!-- Unified Header & Subtle Toggle -->
+    <div class="dashboard-header-container">
+        
+        <!-- Left Side: Dynamic Title & Subtitle -->
+        <div class="dashboard-header-text">
+            <h2 id="dashboard-title">$1 Billion Consortium Dashboard</h2>
+        </div>
+
+        <!-- Right Side: Small Utility Dropdown -->
+        <div class="dashboard-utility-filter">
+            <label for="perf-org-filter">View</label>
+            <select id="perf-org-filter">
+                <option value="ALL">Consolidated Total</option>
+                <option value="BCZ">Black Cultural Zone (BCZ)</option>
+                <option value="Roots">Roots Community Health Center</option>
+                <option value="EOYDC">East Oakland Youth Development Center (EOYDC)</option>
+                <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
+            </select>
+        </div>
+        
+    </div>
+
+    <!-- Group 1: Liquidity & Solvency (The Dials) -->
+    <h3 class="dashboard-section-title">Liquidity, Solvency & Reserves</h3>
+    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+        
+        <div class="metric-card">
+            <h4>Liquidity Ratio</h4>
+            <div style="position: relative; height: 130px; display: flex; justify-content: center;">
+                <canvas id="dial-liquidity"></canvas>
+                <div id="text-liquidity" style="position: absolute; bottom: 10px; font-size: 1.8rem; font-weight: 800; color: #0f172a;">--</div>
+            </div>
+            <div class="metric-target">Target: > 1.0x</div>
+        </div>
+
+        <div class="metric-card">
+            <h4>Debt / Solvency</h4>
+            <div style="position: relative; height: 130px; display: flex; justify-content: center;">
+                <canvas id="dial-debt"></canvas>
+                <div id="text-debt" style="position: absolute; bottom: 10px; font-size: 1.8rem; font-weight: 800; color: #0f172a;">--</div>
+            </div>
+            <div class="metric-target">Target: < 40%</div>
+        </div>
+
+        <div class="metric-card">
+            <h4>Operating Reserve</h4>
+            <div style="position: relative; height: 130px; display: flex; justify-content: center;">
+                <canvas id="dial-reserve"></canvas>
+                <div id="text-reserve" style="position: absolute; bottom: 10px; font-size: 1.8rem; font-weight: 800; color: #0f172a;">--</div>
+            </div>
+            <div class="metric-target">Target: > 3 Months</div>
+        </div>
+    </div>
+
+    <!-- Group 2: Operational Efficiency (The Progress Bars) -->
+    <h3 class="dashboard-section-title">Operational Efficiency</h3>
+    <div class="dashboard-grid" style="grid-template-columns: 1fr;">
+        <div class="metric-card" style="text-align: left; padding: 25px 30px;">
+            
+            <!-- Admin vs Program Bar -->
+            <div style="margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <h4 style="margin: 0;">Admin / Program Expense Ratio</h4>
+                    <span id="text-efficiency-prog" style="font-weight: 800; font-size: 1.1rem;">--</span>
+                </div>
+                <div style="background: #e2e8f0; height: 16px; border-radius: 8px; overflow: hidden; display: flex;">
+                    <!-- Green for Program (Healthy), Gray for Admin -->
+                    <div id="bar-prog" style="background: #059669; width: 0%; transition: width 0.8s ease;"></div>
+                    <div id="bar-admin" style="background: #64748b; width: 0%; transition: width 0.8s ease;"></div>
+                </div>
+                <div class="metric-target" style="margin-top: 5px;">Target: > 75% Program / < 15% Admin</div>
+            </div>
+
+            <!-- Fundraising Efficiency Bar -->
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <h4 style="margin: 0;">Fundraising Efficiency</h4>
+                    <span id="text-efficiency-fund" style="font-weight: 800; font-size: 1.1rem;">--</span>
+                </div>
+                <div style="background: #e2e8f0; height: 16px; border-radius: 8px; overflow: hidden;">
+                    <!-- Teal for Fundraising -->
+                    <div id="bar-fund" style="background: #0d9488; width: 0%; transition: width 0.8s ease;"></div>
+                </div>
+                <div class="metric-target" style="margin-top: 5px;">Target: < 15%</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Group 3: Revenue Diversity & Aging -->
+    <h3 class="dashboard-section-title">Diversity & Sub-Ledger Metrics</h3>
+    <div class="dashboard-grid">
+        <div class="metric-card">
+            <h4>Revenue Diversity</h4>
+            <div id="ratio-diversity" class="metric-value">--</div>
+            <div class="metric-target">Target: > 3 Streams</div>
+        </div>
+        <div class="metric-card">
+            <h4>HHI (Est.)</h4>
+            <div id="ratio-hhi" class="metric-value">--</div>
+            <div class="metric-target">Concentration Index</div>
+        </div>
+        <div class="metric-card">
+            <h4>A/R Aging > 90 Days</h4>
+            <div id="ratio-ar-aging" class="metric-value" style="font-size: 1.2rem;">--</div>
+            <div class="metric-target">Monitor Closely</div>
+        </div>
+        <div class="metric-card">
+            <h4>A/P Aging > 90 Days</h4>
+            <div id="ratio-ap-aging" class="metric-value" style="font-size: 1.2rem;">--</div>
+            <div class="metric-target">Monitor Closely</div>
+        </div>
+    </div>
+    <!-- Group 4: Visual Analytics -->
+    <h3 class="dashboard-section-title">Visual Analytics</h3>
+    <div class="dashboard-grid" style="grid-template-columns: 2fr 1fr;">
+        <!-- Large Chart for Revenue vs Expenses -->
+        <div class="metric-card" style="padding: 20px;">
+            <h4 style="text-align: left;">Financial Trajectory</h4>
+            <canvas id="trajectoryChart" height="100"></canvas>
+        </div>
+        <!-- Smaller Charts for Diversity and Efficiency -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="metric-card">
+                <h4>Expense Allocation</h4>
+                <canvas id="allocationChart"></canvas>
+            </div>
+            <div class="metric-card">
+                <h4>Revenue Diversity</h4>
+                <canvas id="diversityChart"></canvas>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- External Logic -->
+    <script src="scripts/nav-active.js"></script>
+    <script src="scripts/performance.js"></script>
+</body>
+</html>

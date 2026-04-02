@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // The 7-Page Architecture [Source 1]
     const pages = [
         { name: "Home", url: "index.html" },
-        { name: "Performance", url: "graphs.html" },
+        { name: "Performance", url: "performance.html" },
         { name: "Financials", url: "financials.html" },
         { name: "Investment Areas", url: "investments.html" },
         { name: "Grant Summary", url: "grants.html" },
