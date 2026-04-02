@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rise East | Consolidated Financial Statements</title>
+    <link rel="stylesheet" href="styles/upload.css">
     <link rel="stylesheet" href="styles/base.css">
 </head>
 <body>
@@ -11,6 +12,86 @@
         <div id="global-nav"></div>
     </header>
 
+      <!-- Upload Portal -->
+<div class="resources-container" style="max-width: 850px; margin: 0 auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #334155;">
+    
+    <h2>Organization Financial Upload Portal</h2>
+    <p>Securely upload your exported accounting CSVs to instantly update the Performance Page ratios.</p>
+
+    <!-- 1. The Upload Form -->
+    <div class="upload-card">
+        
+        <div class="upload">
+            
+            <!-- Organization Dropdown -->
+            <div class="dropdown-style">
+                <label for="org-select" id= "org-select-label">Organization:</label>
+                <select id="org-select">
+                    <option value="">-- Select Organization --</option>
+                    <option value="BCZ">Black Cultural Zone (BCZ)</option>
+                    <option value="Roots">Roots Community Health Center</option>
+                    <option value="EOYDC">East Oakland Youth Development Center (EOYDC)</option>
+                    <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
+                </select>
+            </div>
+
+            <!-- Fiscal Year/Period Dropdown -->
+            <div class="fiscalyear">
+                <label for="fy-select" id="fy-select-label">Fiscal Year/Period:</label>
+                <select id="fy-select">
+                    <option value="FY2024">FY 2024</option>
+                    <option value="FY2023">FY 2023</option>
+                    <option value="FY2022">FY 2022</option>
+                    <option value="FY2021">FY 2021</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- CSV File Input -->
+        <div class="csvfileinput">
+            <label for="financialCsvUpload" id="financialCsvUploadlabel">Financial Statement (CSV export only):</label>
+            <input type="file" id="financialCsvUpload" accept=".csv"/>
+        </div>
+
+        <!-- Submit Button -->
+        <button id="submitUploadBtn">
+            Submit & Sync Financial Data
+        </button>
+    </div>
+
+    <!-- 2. The Alert Container (Hidden by default, triggered by JS) -->
+    <div id="alert-container" class="alert-box">
+        <!-- Success or Error messages will be injected here -->
+    </div>
+
+    <!-- 3. The History Cache Log (Reads from LocalStorage) -->
+    <div class="history-card">
+        <h3>Local Upload History Cache</h3>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Date / Time</th>
+                    <th>Organization</th>
+                    <th>Period</th>
+                    <th>File Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="upload-history-list">
+                <!-- Data will be dynamically injected here -->
+                <tr>
+                    <td id="history-card" colspan="5">
+                        No uploads cached in this browser session yet.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
     <script src="scripts/nav-active.js"></script>
+    <script src="scripts/source_docs.js"></script>
 </body>
 </html>

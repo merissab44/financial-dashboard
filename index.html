@@ -12,94 +12,60 @@
   <header class="main-header">
     <div id="global-nav"></div>
   </header>
-    <section class="kpi-grid" style="margin-bottom: 14px;">
-      <div class="card kpi">
-        <div class="label">Select year</div>
     
-        <select id="year-filter" class="kpi-select styled-dropdown">
-          <option>Loading...</option>
+    <!-- Macro Fund Container: $1 Billion Goal -->
+  <div class="macro-fund-container" style="background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px;">
+      <h2>$1 Billion Consortium Goal</h2>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; color: #475569;">
+          <span>Progress: $230,000,000</span>
+          <span>Goal: $1,000,000,000</span>
+      </div>
+      
+      <!-- Horizontal Stacked Bar -->
+      <div class="progress-bar-container" style="width: 100%; background: #e2e8f0; height: 30px; border-radius: 15px; overflow: hidden; display: flex;">
+          <!-- Part 1: Rise East 40x40 ($100M = 10%) -->
+          <div style="width: 10%; background: #2563eb; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: bold;" title="Part 1: Rise East ($100M)">Rise East</div>
+          <!-- Part 2: Placeholder ($130M = 13%) -->
+          <div style="width: 13%; background: #059669; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: bold;" title="Part 2: Expanded Initiatives ($130M)">Part 2</div>
+      </div>
+      <p style="margin-top: 10px; font-size: 0.9rem; color: #64748b;">Remaining Balance to Raise: $770,000,000</p>
+  </div>
+
+  <!-- Tab 1: Consolidated Financials (Landing Page) -->
+<div id="tab-consolidated" class="tab-content active">
+    <h2>Consolidated Financial Statements</h2>
+    <p>Comprehensive four-way view of activities, position, functional expenses, and budget variances.</p>
+    
+    <!-- The Master Organization Filter -->
+    <div class="filter-container" style="margin: 20px 0;">
+        <label for="org-filter"><strong>Filter by Entity:</strong></label>
+        <select id="org-filter" onchange="renderConsolidatedFinancials()">
+            <option value="ALL">Consolidated Consortium Total</option>
+            <option value="BCZ">Black Cultural Zone (BCZ)</option>
+            <option value="Roots">Roots Community Health</option>
+            <option value="EOYDC">East Oakland Youth Development (EOYDC)</option>
+            <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
         </select>
-      </div>
-    </section>
-    
-    
+    </div>
 
-    <!-- KPI row -->
-    <section class="kpi-grid">
-
-      <div class="card kpi">
-        <div class="label">Total Revenue</div>
-        <div class="value" id="total-revenue">—</div>
-        <div class="sub">
-        </div>
-      </div>
-    
-      <div class="card kpi">
-        <div class="label">Total Expenses</div>
-        <div class="value" id="total-expenses">—</div>
-        <div class="sub">
-        </div>
-      </div>
-    
-      <div class="card kpi">
-        <div class="label">Surplus / (Deficit)</div>
-        <div class="value" id="surplus-value">—</div>
-        <div class="sub">
-        </div>
-      </div>
-
-    </section>
-
-    <!-- UCOA + Preview -->
-    <section class="section">
-      <div class="section-header">
-        <h2>Unified Chart of Accounts</h2>
-      </div>
-
-      <div class="grid-2">
-        <!-- UCOA table card -->
-        <div class="card">
-          <div class="table-wrap">
-            <table>
-              <thead>
+    <!-- Statement of Activities (Budget | Actual | Variance) -->
+    <div class="financial-table-container">
+        <h3>Statement of Activities</h3>
+        <table id="activities-table" style="width: 100%; text-align: left;">
+            <thead>
                 <tr>
-                  <th>Strategic dimension</th>
-                  <th>Statement</th>
-                  <th class="num">Amount</th>
-                  <th class="num">% of total</th>
+                    <th>Category</th>
+                    <th>Budget</th>
+                    <th>Actual</th>
+                    <th>Variance ($)</th>
                 </tr>
-              </thead>
-              <tbody id="ucoaBody">
-                <!-- Placeholder rows (replace with real data later) -->
-                <tr>
-                  <td><span class="dim"><span class="dot b1"></span>FN-01 Backbone & Gen Ops</span></td>
-                  <td>Admin, indirect, management fees</td>
-                  <td class="num">$—</td>
-                  <td class="num">—%</td>
-                </tr>
-                <tr>
-                  <td><span class="dim"><span class="dot b2"></span>FN-02 Live & Thrive</span></td>
-                  <td>Buildings, capital improvements</td>
-                  <td class="num">$—</td>
-                  <td class="num">—%</td>
-                </tr>
-                <tr>
-                  <td><span class="dim"><span class="dot b3"></span>FN-04 Power Building</span></td>
-                  <td>Civic engagement, organizing</td>
-                  <td class="num">$—</td>
-                  <td class="num">—%</td>
-                </tr>
-                <tr>
-                  <td><span class="dim"><span class="dot b4"></span>FN-05 Learn & Grow</span></td>
-                  <td>Youth programs, scholarships</td>
-                  <td class="num">$—</td>
-                  <td class="num">—%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-    </section>
+            </thead>
+            <tbody id="activities-body">
+                <!-- Injected via JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
 
     <div class="footer">
     </div>
@@ -107,6 +73,7 @@
   <script src="scripts/nav-active.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="scripts/ucoa.js"></script>
+  <script src="scripts/financials.js"></script>
 
 </body>
 </html>

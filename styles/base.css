@@ -355,3 +355,26 @@ tbody tr:hover td{
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Blue glow on click */
 }
+/* Alert Container Styles */
+.alert-box {
+    display: none; 
+    padding: 15px 20px; 
+    border-radius: 6px; 
+    margin-bottom: 30px; 
+    font-weight: bold; 
+    border-left: 5px solid;
+}
+
+.alert-success {
+    display: block;
+    background-color: #d1fae5;
+    color: #065f46;
+    border-left-color: #10b981;
+}
+
+.alert-error {
+    display: block;
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-left-color: #ef4444;
+}

@@ -14,82 +14,116 @@
         <div id="global-nav"></div>
     </header>
 
-<div id="dashboard-content">
-
-  <!-- ========================================== -->
-  <!-- TOP SECTION: KPI CARDS (Liquidity & Efficiency) -->
-  <!-- ========================================== -->
-  <div class="kpi-dashboard-grid">
+  <div class="performance-controls" style="margin-bottom: 20px; display: flex; gap: 15px;">
     
-    <!-- Liquidity & Debt -->
-    <div class="kpi-card">
-      <h3>Current Ratio</h3>
-      <p id="current-ratio" class="kpi-value">Loading...</p>
-      <span class="kpi-target">Target: > 1.0</span>
-    </div>
+    <!-- Primary View Toggle -->
+    <select id="view-level-filter" class="styled-dropdown">
+        <option value="macro">$1 Billion Consortium Level</option>
+        <option value="org">Organization Level</option>
+    </select>
 
-    <div class="kpi-card">
-      <h3>Debt Ratio</h3>
-      <p id="debt-ratio" class="kpi-value">Loading...</p>
-      <span class="kpi-target">Target: < 40%</span>
-    </div>
-
-    <div class="kpi-card">
-      <h3>Operating Reserve</h3>
-      <p id="operating-reserve" class="kpi-value">Loading...</p>
-      <span class="kpi-target">Target: > 3 Months</span>
-    </div>
-
-    <!-- Functional Expenses -->
-    <div class="kpi-card">
-      <h3>Program Expense Ratio</h3>
-      <p id="program-ratio" class="kpi-value">Loading...</p>
-      <span class="kpi-target">Target: > 75%</span>
-    </div>
-
-    <div class="kpi-card">
-      <h3>Admin Expense Ratio</h3>
-      <p id="admin-ratio" class="kpi-value">Loading...</p>
-      <span class="kpi-target">Target: < 15%</span>
-    </div>
-
-    <div class="kpi-card">
-      <h3>Fundraising Efficiency</h3>
-      <p id="fund-ratio" class="kpi-value">Loading...</p>
-      <span class="kpi-target">Target: < 10%</span>
-    </div>
-
-  </div> <!-- End KPI Grid -->
-<div class="dashboard-graphs-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
-  
-  <!-- Graph 1: Investment Areas -->
-  <div class="chart-card">
-    <h3>Budget by Investment Area</h3>
-    <div class="chart-container">
-        <canvas id="areaDonutChart"></canvas>
-    </div>
-  </div>
-
-  <!-- Graph 2: Grantee Allocations -->
-  <div class="chart-card">
-    <h3>Budget by Grantee</h3>
-    <div class="chart-container">
-        <canvas id="granteeBarChart"></canvas>
-    </div>
-  </div>
-
-  <!-- Graph 3: Budget vs Actuals -->
-  <div class="chart-card" style="grid-column: 1 / -1; justify-self: center; width: 100%; max-width: 900px;">
-    <h3>Year 1: Budget vs Actuals</h3>
-    <div class="chart-container">
-        <canvas id="budgetActualChart"></canvas>
-    </div>
-  </div>
+    <!-- Secondary Org Toggle (Hidden by default) -->
+    <select id="org-filter" class="styled-dropdown" style="display: none;">
+        <option value="BCZ">Black Cultural Zone (BCZ)</option>
+        <option value="Roots">Roots Community Health</option>
+        <option value="EOYDC">East Oakland Youth Development (EOYDC)</option>
+        <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
+    </select>
 
 </div>
 
+<!-- Tab 2: Dashboard (Performance & Ratios) -->
+<div id="tab-dashboard" class="tab-content">
+    
+    <div style="margin-bottom: 30px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 5px;">Executive Dashboard</h2>
+        <p style="color: #64748b;">Real-time financial health indicators powered by the Golden Record engine.</p>
+    </div>
+
+    <!-- The Organization Filter -->
+    <div class="filter-container" style="margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label for="perf-org-filter" style="font-weight: 600; margin-right: 10px;">Filter Dashboard by Entity:</label>
+        <select id="perf-org-filter" onchange="updatePerformanceDials()" style="padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; min-width: 300px;">
+            <option value="ALL">Consolidated Consortium Total</option>
+            <option value="BCZ">Black Cultural Zone (BCZ)</option>
+            <option value="Roots">Roots Community Health Center</option>
+            <option value="EOYDC">East Oakland Youth Development Center (EOYDC)</option>
+            <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
+        </select>
+    </div>
+
+    <!-- Group 1: Liquidity & Solvency -->
+    <h3 class="dashboard-section-title">Liquidity & Solvency</h3>
+    <div class="dashboard-grid">
+        <div class="metric-card">
+            <h4>Current Ratio</h4>
+            <div id="ratio-current" class="metric-value">--</div>
+            <div class="metric-target">Target: > 1.0</div>
+        </div>
+        <div class="metric-card">
+            <h4>Quick Ratio</h4>
+            <div id="ratio-quick" class="metric-value">--</div>
+            <div class="metric-target">Target: > 1.0</div>
+        </div>
+        <div class="metric-card">
+            <h4>Operating Reserve</h4>
+            <div id="ratio-reserve" class="metric-value">--</div>
+            <div class="metric-target">Target: > 3 Months</div>
+        </div>
+        <div class="metric-card">
+            <h4>Debt Ratio</h4>
+            <div id="ratio-debt" class="metric-value">--</div>
+            <div class="metric-target">Target: < 40%</div>
+        </div>
+    </div>
+
+    <!-- Group 2: Operational Efficiency -->
+    <h3 class="dashboard-section-title">Operational Efficiency</h3>
+    <div class="dashboard-grid">
+        <div class="metric-card">
+            <h4>Program Expense Ratio</h4>
+            <div id="ratio-program" class="metric-value">--</div>
+            <div class="metric-target">Target: > 75%</div>
+        </div>
+        <div class="metric-card">
+            <h4>Admin Expense Ratio</h4>
+            <div id="ratio-admin" class="metric-value">--</div>
+            <div class="metric-target">Target: < 15%</div>
+        </div>
+        <div class="metric-card">
+            <h4>Fundraising Efficiency</h4>
+            <div id="ratio-fundraising" class="metric-value">--</div>
+            <div class="metric-target">Target: < 15%</div>
+        </div>
+    </div>
+
+    <!-- Group 3: Revenue Diversity & Aging -->
+    <h3 class="dashboard-section-title">Diversity & Sub-Ledger Metrics</h3>
+    <div class="dashboard-grid">
+        <div class="metric-card">
+            <h4>Revenue Diversity</h4>
+            <div id="ratio-diversity" class="metric-value">--</div>
+            <div class="metric-target">Target: > 3 Streams</div>
+        </div>
+        <div class="metric-card">
+            <h4>HHI (Est.)</h4>
+            <div id="ratio-hhi" class="metric-value">--</div>
+            <div class="metric-target">Concentration Index</div>
+        </div>
+        <div class="metric-card">
+            <h4>A/R Aging > 90 Days</h4>
+            <div id="ratio-ar-aging" class="metric-value" style="font-size: 1.2rem;">--</div>
+            <div class="metric-target">Monitor Closely</div>
+        </div>
+        <div class="metric-card">
+            <h4>A/P Aging > 90 Days</h4>
+            <div id="ratio-ap-aging" class="metric-value" style="font-size: 1.2rem;">--</div>
+            <div class="metric-target">Monitor Closely</div>
+        </div>
+    </div>
+
     <!-- External Logic -->
-    <script type="module" src="scripts/graphs.js"></script>
     <script src="scripts/nav-active.js"></script>
+    <script src="scripts/graphs.js"></script>
 </body>
 </html>

@@ -36,7 +36,6 @@ export const renderAreaDonutChart = (canvasId, allocationsData) => {
                     align: 'center',
                     labels: {
                         boxWidth: 12,   // Shrinks the colored square
-                        textAlign: 'center',
                         font: {
                             size: 10    // Shrinks the text slightly to fit
                         },
