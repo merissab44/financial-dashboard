@@ -12,36 +12,69 @@
         <div id="global-nav"></div>
     </header>
 
-    <section class="hero">
-        <h1>Consolidated Financial Statements</h1>
-        <p>Comprehensive four-way view of activities, position, functional expenses, and budget variances.</p>
-    </section>
-
-    <div class="financials-dashboard" style="margin-top: 20px;">
-  
-    <!-- Tabs Navigation -->
-    <div class="actions" style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <!-- Active by default -->
-        <button class="btn active" data-view="soa">Statement of Activities</button>
-        <button class="btn secondary" data-view="sfp">Financial Position</button>
-        <button class="btn secondary" data-view="sfe">Functional Expenses</button>
-        <button class="btn secondary" data-view="variances">Budget Variances</button>
-    </div>
-    <div>
-      <label for="year-filter" style="font-weight: 600; margin-right: 8px; color: #334155;">Select Fiscal Year:</label>
-      <select id="year-filter" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem;">
-        <option value="2024" selected>2024</option>
-        <option value="2023">2023</option>
-        <option value="2022">2022</option>
-      </select>
+    <div id="tab-financials" class="tab-content active dashboard-wrapper">
+    
+    <div class="dashboard-header-container">
+        <div class="dashboard-header-text">
+            <h2>Consolidated Financial Statements</h2>
+            <p>Comprehensive four-way view of activities, position, functional expenses, and budget variances.</p>
+        </div>
+        
+        <!-- Fiscal Year Selector -->
+        <div class="dashboard-utility-filter">
+            <label for="fin-fy-filter">Select Fiscal Year:</label>
+            <select id="fin-fy-filter">
+                <option value="2024">FY 2024</option>
+                <option value="2023">FY 2023</option>
+                <option value="2022">FY 2022</option>
+                <option value="2021">FY 2021</option>
+            </select>
+        </div>
     </div>
 
-    <!-- Content Container (Tables will be injected here) -->
-    <div id="financials-content" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-x: auto;">
-        <p style="text-align: center; color: #64748b;">Loading financial data...</p>
+    <!-- Sub-Navigation for the 3 Distinct Views -->
+    <div class="financial-sub-nav">
+        <button class="sub-nav-btn active" onclick="switchFinancialView('activities')">Statement of Activities</button>
+        <button class="sub-nav-btn" onclick="switchFinancialView('position')">Financial Position</button>
+        <button class="sub-nav-btn" onclick="switchFinancialView('functional')">Functional Expenses</button>
     </div>
 
-  </div>
+    <div class="dashboard">
+    <!-- The Master Data Table -->
+    <div class="table-container">
+        <table class="financial-table" id="master-financial-table">
+            <thead>
+                <!-- Top Tier: Organizations -->
+                <tr class="tier-one-headers">
+                    <th rowspan="2" style="text-align: left; width: 25%;">Account Category</th>
+                    <th colspan="3">BCZ</th>
+                    <th colspan="3">ROOTS</th>
+                    <th colspan="3">EOYDC</th>
+                    <th colspan="3">BOEN</th>
+                    <th colspan="3" class="highlight-col">CONSOLIDATED TOTAL</th>
+                </tr>
+                <!-- Bottom Tier: The Critical Requirement (Budget | Actual | Variance) -->
+                <tr class="tier-two-headers">
+                    <th>Bgt</th><th>Act</th><th>Var</th>
+                    <th>Bgt</th><th>Act</th><th>Var</th>
+                    <th>Bgt</th><th>Act</th><th>Var</th>
+                    <th>Bgt</th><th>Act</th><th>Var</th>
+                    <th class="highlight-col">Budget</th><th class="highlight-col">Actual</th><th class="highlight-col">Variance</th>
+                </tr>
+            </thead>
+            <tbody id="financial-table-body">
+                <!-- JavaScript will dynamically inject the rows here based on the selected sub-tab -->
+                <tr>
+                    <td colspan="16" style="text-align: center; padding: 40px; color: #94a3b8;">
+                        <em>Select a fiscal year and upload source documents to populate the Golden Record.</em>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</div>
 
     <script src="scripts/nav-active.js"></script>
     <script type="module" src="scripts/financials.js"></script>
