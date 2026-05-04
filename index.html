@@ -1,79 +1,370 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Financial Dashboard • Home</title>
-  <link rel="stylesheet" href="styles/base.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rise East Golden Record Dashboard</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <!-- Chart.js for the Performance Dials -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-  <!-- navbar -->
-  <header class="main-header">
-    <div id="global-nav"></div>
-  </header>
+
+    <!-- GLOBAL HEADER & $1 BILLION TRACKER -->
+    <header class="master-header">
+        <div class="logo-container">
+            <h1>Rise East | Golden Record</h1>
+        </div>
+        
+        <!-- The $1 Billion 40x40 Consortium Goal Progress Bar -->
+        <div class="billion-dollar-tracker">
+            <h3>$1 Billion 40x40 Consortium Goal</h3>
+            
+            <!-- The Progress Bar Container -->
+            <div class="progress-bar-main">
+                <!-- Phase 1: 10% -->
+                <div class="progress-segment-simple phase-1">
+                    10%
+                </div>
+                <!-- Phase 2: 13% -->
+                <div class="progress-segment-simple phase-2">
+                    13%
+                </div>
+            </div>
+            
+            <!-- The Descriptive Labels Underneath -->
+            <div class="progress-labels">
+                <div class="progress-label-group">
+                    <span class="progress-label-amount teal">$100 Million:</span>
+                    <span class="progress-label-description">Rise East</span>
+                </div>
+                <!-- This label starts exactly at the 10% mark so it perfectly aligns with the dark blue section -->
+                <div class="progress-label-group">
+                    <span class="progress-label-amount navy">$130 Million:</span>
+                    <span class="progress-label-description">Phase 2 Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MASTER 6-TAB NAVIGATION -->
+    <nav class="main-nav">
+        <button class="nav-btn active" onclick="switchMainTab('tab-financials')">Consolidated Financials</button>
+        <button class="nav-btn" onclick="switchMainTab('tab-dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="switchMainTab('tab-investments')">Investment Areas</button>
+        <button class="nav-btn" onclick="switchMainTab('tab-grants')">Grant Summary</button>
+        <button class="nav-btn" onclick="switchMainTab('tab-sources')">Source Documents</button>
+        <button class="nav-btn" onclick="switchMainTab('tab-crosswalk')">Crosswalk (UCOA)</button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: CONSOLIDATED FINANCIALS (Landing Page) -->
+    <!-- ========================================== -->
+    <div id="tab-financials" class="main-tab-content dashboard-wrapper active">
+        <div class="dashboard-header-text">
+            <h2>Consolidated Financial Statements</h2>
+            <p>Comprehensive four-way view of activities, position, functional expenses, and budget variances.</p>
+        </div>
+        
+        <div class="dashboard-utility-filter">
+            <label for="fin-fy-filter"><strong>Select Fiscal Year:</strong></label>
+            <select id="fin-fy-filter">
+                <option value="2024">FY 2024</option>
+                <option value="2023">FY 2023</option>
+                <option value="2022">FY 2022</option>
+                <option value="2021">FY 2021</option>
+            </select>
+        </div>
+
+        <!-- 4 Sub-Navigation Views (Updated to data-view) -->
+        <div class="financial-sub-nav">
+            <button class="sub-nav-btn active" data-view="activities">Statement of Activities</button>
+            <button class="sub-nav-btn" data-view="position">Financial Position</button>
+            <button class="sub-nav-btn" data-view="functional">Functional Expenses</button>
+            <button class="sub-nav-btn" data-view="budget">Budget Variances</button>
+        </div>
+
+        <!-- Master Data Table -->
+        <div class="table-container">
+            <table class="financial-table" id="master-financial-table">
+                <thead id="financial-table-head">
+                    <!-- Injected via financials-page.js -->
+                </thead>
+                <tbody id="financial-table-body">
+                    <!-- Injected via financials-page.js -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: DASHBOARD (Performance & Ratios) -->
+    <!-- ========================================== -->
+    <div id="tab-dashboard" class="main-tab-content dashboard-wrapper">
+        <h3 class="dashboard-section-title">Liquidity, Solvency & Reserves</h3>
+        
+        <!-- The 4 Executive Dials -->
+        <div class="dashboard-grid">
+            <div class="metric-card">
+                <h4>Current Ratio</h4>
+                <div class="dial-container">
+                    <canvas id="dial-liquidity"></canvas>
+                    <div id="text-liquidity" class="dial-text">--</div>
+                </div>
+                <div class="metric-target">Target: > 1.0x</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>Quick Ratio</h4>
+                <div class="dial-container">
+                    <canvas id="dial-quick"></canvas>
+                    <div id="text-quick" class="dial-text">--</div>
+                </div>
+                <div class="metric-target">Target: > 1.0x</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>Debt / Solvency</h4>
+                <div class="dial-container">
+                    <canvas id="dial-debt"></canvas>
+                    <div id="text-debt" class="dial-text">--</div>
+                </div>
+                <div class="metric-target">Target: < 40%</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>Operating Reserve</h4>
+                <div class="dial-container">
+                    <canvas id="dial-reserve"></canvas>
+                    <div id="text-reserve" class="dial-text">--</div>
+                </div>
+                <div class="metric-target">Target: > 3 Months</div>
+            </div>
+        </div>
+
+        <!-- Group 2: Operational Efficiency & Aging -->
+        <h3 class="dashboard-section-title dashboard-section">Efficiency & Receivables</h3>
+        <div class="dashboard-grid">
+            
+            <div class="metric-card">
+                <h4>Program Expense Ratio</h4>
+                <div id="text-program-exp" class="metric-value teal">--</div>
+                <div class="metric-target">Target: > 75%</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>Admin Expense Ratio</h4>
+                <div id="text-admin-exp" class="metric-value navy">--</div>
+                <div class="metric-target">Target: < 15%</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>Fundraising Efficiency</h4>
+                <div id="text-fund-eff" class="metric-value navy">--</div>
+                <div class="metric-target">Target: < 10%</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>Revenue Diversity Ratio</h4>
+                <div id="text-rev-div" class="metric-value navy">--</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>A/R Aging > 90 Days</h4>
+                <div id="text-ar-aging" class="metric-value red">--</div>
+            </div>
+
+            <div class="metric-card">
+                <h4>A/P Aging > 90 Days</h4>
+                <div id="text-ap-aging" class="metric-value red">--</div>
+            </div>
+            
+            <div class="metric-card">
+                <h4>HHI (Est.)</h4>
+                <div id="text-hhi" class="metric-value navy">--</div>
+            </div>
+        </div>
+    </div>
+        
+
+    <!-- ========================================== -->
+    <!-- TAB 3: INVESTMENT AREAS -->
+    <!-- ========================================== -->
+    <div id="tab-investments" class="main-tab-content dashboard-wrapper">
+        <h2>Investment Areas</h2>
+        <p>Tracks spending against the 8 strategic dimensions.</p>
+        <!-- The UI for the specific investment trackers will be rendered here -->
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: GRANT SUMMARY -->
+    <!-- ========================================== -->
+    <div id="tab-grants" class="main-tab-content dashboard-wrapper" style="display: none; max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        <div class="dashboard-header-text" style="margin-bottom: 30px;">
+            <h2>Grant Summary & Capital Commitments</h2>
+            <p>Unified extraction of multi-year funder commitments and required programmatic deliverables.</p>
+        </div>
+
+        <!-- High-Level Capital Goals -->
+        <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            <div class="metric-card" style="background: #0f172a; color: white;">
+                <h4 style="color: #cbd5e1;">Phase 1 Seed Capital</h4>
+                <div style="font-size: 2.2rem; font-weight: 800; margin: 15px 0;">$10.6M</div>
+                <div style="font-size: 0.85rem; color: #94a3b8;">$8M Direct + $2.6M Technical Assistance</div>
+            </div>
+            <div class="metric-card" style="background: #0d9488; color: white;">
+                <h4 style="color: #ccfbf1;">Public Funding Leverage Target</h4>
+                <div style="font-size: 2.2rem; font-weight: 800; margin: 15px 0;">$200M+</div>
+                <div style="font-size: 0.85rem; color: #99f6e4;">Cumulatively leveraged by 2029</div>
+            </div>
+        </div>
+
+        <!-- The Programmatic Deliverables Table -->
+        <div class="table-container">
+            <table class="financial-table">
+                <thead>
+                    <tr class="tier-one-headers">
+                        <th style="text-align: left; width: 15%;">Partner</th>
+                        <th style="text-align: left; width: 25%;">Investment Area</th>
+                        <th style="text-align: left; width: 60%;">Extracted Deliverable & Milestones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; font-weight: bold;">Oakland Thrives</td>
+                        <td style="text-align: left;">Backbone / Gen Ops</td>
+                        <td style="text-align: left; color: #475569;">Hire an external evaluation firm for quantitative/qualitative data collection and refine central measurement systems.</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: bold;">Roots</td>
+                        <td style="text-align: left;">Community Data Trust</td>
+                        <td style="text-align: left; color: #475569;">Hire Director of Research & Evaluation to implement the Data Trust and coordinate safety data via the Streetwyze platform.</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: bold;">BCZ</td>
+                        <td style="text-align: left;">Work & Wealth</td>
+                        <td style="text-align: left; color: #475569;">Establish AKOMA Farmers Market (15+ vendors) and Black Cooperative Economy Development (3-5 worker-owned businesses).</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: bold;">BOEN</td>
+                        <td style="text-align: left;">Power Building</td>
+                        <td style="text-align: left; color: #475569;">Execute "People Power" social capital bridges, and fund "Cultural Power" mini-grants managed by an arts network weaver.</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: bold;">EOYDC</td>
+                        <td style="text-align: left;">Learn & Grow</td>
+                        <td style="text-align: left; color: #475569;">Convene youth advisory body, launch the CEE Internship Hub, and manage a pilot Accelerator Fund for the 40x40.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: SOURCE DOCUMENTS -->
+    <!-- ========================================== -->
+    <div id="tab-sources" class="main-tab-content dashboard-wrapper" style="display: none; max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        <div class="dashboard-header-text" style="margin-bottom: 30px;">
+            <h2>Source Documents</h2>
+            <p>The monthly upload portal for CSV ingestion. Drop your NetSuite or QuickBooks audited financial exports below to automatically route them through the Tactical Engine.</p>
+        </div>
+
+        <!-- Organization and Period Inputs -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label for="organization-select" style="display: block; color: #0f172a; font-weight: 600; margin-bottom: 8px;">Select Organization</label>
+                <select id="organization-select" style="width: 100%; height: 48px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; color: #0f172a; background-color: white; cursor: pointer; box-sizing: border-box;">
+                    <option value="">-- Select an organization --</option>
+                    <option value="Black Cultural Zone (BCZ)">Black Cultural Zone (BCZ)</option>
+                    <option value="Roots Community Health">Roots Community Health</option>
+                    <option value="East Oakland Youth Dev (EOYDC)">East Oakland Youth Dev (EOYDC)</option>
+                    <option value="Brotherhood of Elders (BOEN)">Brotherhood of Elders (BOEN)</option>
+                    <option value="Oakland Thrives (Backbone)">Oakland Thrives (Backbone)</option>
+                </select>
+            </div>
+            <div>
+                <label for="period-input" style="display: block; color: #0f172a; font-weight: 600; margin-bottom: 8px;">Reporting Period</label>
+                <input type="date" id="period-input" style="width: 100%; height: 48px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; color: #0f172a; background-color: white; cursor: pointer; box-sizing: border-box;">
+            </div>
+        </div>
+
+        <!-- The Drag & Drop Portal -->
+        <div id="drop-zone" style="border: 3px dashed #0d9488; border-radius: 12px; padding: 60px; text-align: center; background-color: #f0fdfa; cursor: pointer; transition: all 0.3s ease;">
+            <div style="font-size: 3rem; margin-bottom: 15px;">☁️</div>
+            <h3 style="color: #0f172a; margin-bottom: 10px; font-weight: 800;">DRAG & DROP CSV HERE</h3>
+            <p style="color: #475569; font-size: 0.9rem;">Or click to browse files. Supported format: .csv</p>
+            <input type="file" id="file-input" accept=".csv" style="display: none;">
+        </div>
+
+        <!-- Pipeline Processing Status -->
+        <div id="upload-status" style="display: none; margin-top: 30px; padding: 20px; background-color: #f8fafc; border-radius: 8px; border-left: 4px solid #0d9488; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #0f172a; margin-bottom: 15px;">Pipeline Status: <span id="status-text" style="color: #059669;">Processing...</span></h4>
+            <ul style="color: #475569; font-size: 0.95rem; line-height: 2; list-style-type: none; padding: 0; font-family: monospace;">
+                <li id="step-1">⏳ 1. Ingesting raw Audited Financials CSV...</li>
+                <li id="step-2" style="color: #94a3b8;">⏳ 2. Pushing through Python Tactical Engine (Regex categorization)...</li>
+                <li id="step-3" style="color: #94a3b8;">⏳ 3. Running exceptions against Tab 6 UCOA Crosswalk...</li>
+                <li id="step-4" style="color: #94a3b8;">⏳ 4. Publishing data to dashboard arrays...</li>
+            </ul>
+        </div>
+        
+        <!-- The Upload History Log -->
+        <div id="upload-history-container">
+            <h3>Upload History</h3>
+            <table class="upload-history-table">
+                <thead>
+                    <tr>
+                        <th>Date Uploaded</th>
+                        <th>Organization</th>
+                        <th>Period</th>
+                        <th>Records Processed</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="upload-history-body">
+                    <!-- JavaScript will inject the history here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: CROSSWALK (The UCOA Dictionary) -->
+    <!-- ========================================== -->
+    <div id="tab-crosswalk" class="main-tab-content dashboard-wrapper">
+        <h2>The UCOA Crosswalk</h2>
+        <p>The master mapping dictionary translating native organization accounts into the unified Golden Record architecture.</p>
+        
+        <!-- Add SheetJS library for Excel reading -->
+        <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+        
+        <div id="crosswalk-loading" style="text-align: center; padding: 40px; color: #64748b;">
+            <div style="font-size: 2rem; margin-bottom: 16px;">📊</div>
+            <p>Loading UCOA Crosswalk data...</p>
+        </div>
+        
+        <div id="crosswalk-content" style="display: none;">
+            <div class="table-container">
+                <table id="crosswalk-table" class="crosswalk-table">
+                    <thead id="crosswalk-thead">
+                        <!-- Headers will be populated dynamically -->
+                    </thead>
+                    <tbody id="crosswalk-tbody">
+                        <!-- Data will be populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    <!-- ========================================== -->
+    <!-- SCRIPTS -->
+    <!-- ========================================== -->
     
-    <!-- Macro Fund Container: $1 Billion Goal -->
-  <div class="macro-fund-container" style="background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px;">
-      <h2>$1 Billion Consortium Goal</h2>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; color: #475569;">
-          <span>Progress: $230,000,000</span>
-          <span>Goal: $1,000,000,000</span>
-      </div>
-      
-      <!-- Horizontal Stacked Bar -->
-      <div class="progress-bar-container" style="width: 100%; background: #e2e8f0; height: 30px; border-radius: 15px; overflow: hidden; display: flex;">
-          <!-- Part 1: Rise East 40x40 ($100M = 10%) -->
-          <div style="width: 10%; background: #2563eb; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: bold;" title="Part 1: Rise East ($100M)">Rise East</div>
-          <!-- Part 2: Placeholder ($130M = 13%) -->
-          <div style="width: 13%; background: #059669; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: bold;" title="Part 2: Expanded Initiatives ($130M)">Part 2</div>
-      </div>
-      <p style="margin-top: 10px; font-size: 0.9rem; color: #64748b;">Remaining Balance to Raise: $770,000,000</p>
-  </div>
+    <!-- Tab switching is handled by financials.js -->
 
-  <!-- Tab 1: Consolidated Financials (Landing Page) -->
-<div id="tab-consolidated" class="tab-content active">
-    <h2>Consolidated Financial Statements</h2>
-    <p>Comprehensive four-way view of activities, position, functional expenses, and budget variances.</p>
-    
-    <!-- The Master Organization Filter -->
-    <div class="filter-container" style="margin: 20px 0;">
-        <label for="org-filter"><strong>Filter by Entity:</strong></label>
-        <select id="org-filter" onchange="renderConsolidatedFinancials()">
-            <option value="ALL">Consolidated Consortium Total</option>
-            <option value="BCZ">Black Cultural Zone (BCZ)</option>
-            <option value="Roots">Roots Community Health</option>
-            <option value="EOYDC">East Oakland Youth Development (EOYDC)</option>
-            <option value="BOEN">Brotherhood of Elders Network (BOEN)</option>
-        </select>
-    </div>
-
-    <!-- Statement of Activities (Budget | Actual | Variance) -->
-    <div class="financial-table-container">
-        <h3>Statement of Activities</h3>
-        <table id="activities-table" style="width: 100%; text-align: left;">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Budget</th>
-                    <th>Actual</th>
-                    <th>Variance ($)</th>
-                </tr>
-            </thead>
-            <tbody id="activities-body">
-                <!-- Injected via JS -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
-    <div class="footer">
-    </div>
-
-  <script src="scripts/nav-active.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="scripts/ucoa.js"></script>
-  <script src="scripts/financials.js"></script>
+    <!-- Our Golden Record Engines -->
+    <script src="scripts/source_docs.js"></script>
+    <script src="scripts/performance.js"></script>
+    <script src="scripts/financials.js"></script>
 
 </body>
 </html>

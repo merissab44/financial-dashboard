@@ -7,17 +7,19 @@ let dialResInstance = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Listen for background sync events from the Resources Upload page
-    window.addEventListener('storage', updatePerformanceDials);
+    window.addEventListener('storage', window.updatePerformanceDials);
     
     // 2. Run an initial check to populate data when the page loads
-    updatePerformanceDials();
+    window.updatePerformanceDials();
 });
 
 // Trigger the update when the dropdown is changed
-document.getElementById('perf-org-filter')?.addEventListener('change', updatePerformanceDials);
+document.getElementById('perf-org-filter')?.addEventListener('change', window.updatePerformanceDials);
 
-function updatePerformanceDials() {
+window.updatePerformanceDials = function() {
     const historyCache = JSON.parse(localStorage.getItem('riseEastOrgUploads'));
+    
+    console.log("updatePerformanceDials called, historyCache:", historyCache);
     
     if (!historyCache || historyCache.length === 0) {
         console.log("No financial data cached yet.");
@@ -67,9 +69,14 @@ function updatePerformanceDials() {
     let totalRevenue = 0, totalContributions = 0;
     let programExp = 0, adminExp = 0, fundExp = 0;
 
-    data.forEach(row => {
+    console.log("Processing data array:", data);
+    
+    data.forEach((row, index) => {
         const amt = row.amount;
         const group = row.group.toLowerCase();
+        const category = row.category.toLowerCase();
+        
+        console.log(`Row ${index}: amount=${amt}, group="${group}", category="${category}"`);
 
         if (group.includes('cash')) cash += amt;
         else if (group.includes('receivable')) ar += amt;
@@ -104,6 +111,12 @@ function updatePerformanceDials() {
     // ==========================================
     // 2. CALCULATE THE RATIOS
     // ==========================================
+    console.log("Financial buckets:", {
+        currentAssets, totalAssets, currentLiabilities, totalLiabilities,
+        netAssets, totalRevenue, totalContributions,
+        programExp, adminExp, fundExp, totalExpenses
+    });
+
     const currentRatio = currentLiabilities > 0 ? (currentAssets / currentLiabilities) : 0;
     const debtRatio = totalAssets > 0 ? (totalLiabilities / totalAssets) : 0;
     const operatingReserveMonths = totalExpenses > 0 ? (netAssets / (totalExpenses / 12)) : 0;
@@ -111,6 +124,11 @@ function updatePerformanceDials() {
     const programExpRatio = totalExpenses > 0 ? (programExp / totalExpenses) : 0;
     const adminExpRatio = totalExpenses > 0 ? (adminExp / totalExpenses) : 0;
     const fundraisingEfficiency = totalContributions > 0 ? (fundExp / totalContributions) : 0;
+
+    console.log("Calculated ratios:", {
+        currentRatio, debtRatio, operatingReserveMonths,
+        programExpRatio, adminExpRatio, fundraisingEfficiency
+    });
 
     let hhi = 0;
     if (totalRevenue > 0) {
